@@ -1,0 +1,9 @@
+# python stuff
+__pycache__
+
+# protect real config files
+config
+config.h
+
+# frontend font files
+*.ttf

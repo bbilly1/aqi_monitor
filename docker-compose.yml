@@ -1,0 +1,73 @@
+version: "3"
+
+services:
+  # ssl
+  letsencrypt:
+    image: jrcs/letsencrypt-nginx-proxy-companion
+    container_name: nginx-proxy-letsencrypt
+    restart: always
+    volumes:
+      - ./volume/nginx-proxy/html:/usr/share/nginx/html
+      - ./volume/nginx-proxy/dhparam:/etc/nginx/dhparam
+      - ./volume/nginx-proxy/vhost:/etc/nginx/vhost.d
+      - ./volume/nginx-proxy/certs:/etc/nginx/certs
+      - /run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      - NGINX_PROXY_CONTAINER=nginx-proxy
+      - DEFAULT_EMAIL=simobilleter@gmail.com
+  # proxy for all web services
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    container_name: nginx-proxy
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./volume/nginx-proxy/html:/usr/share/nginx/html
+      - ./volume/nginx-proxy/dhparam:/etc/nginx/dhparam
+      - ./volume/nginx-proxy/vhost:/etc/nginx/vhost.d
+      - ./volume/nginx-proxy/certs:/etc/nginx/certs
+      - /run/docker.sock:/tmp/docker.sock:ro
+    labels:
+      - "com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy"
+  # backend flask
+  flask:
+    build: ./backend/flask
+    container_name: flask
+    restart: always
+    environment: 
+      - APP_NAME=FlaskBackend
+      - TZ=Asia/Bangkok
+    expose: 
+      - "8080"
+  # backend nginx
+  nginx:
+    build: ./backend/nginx
+    container_name: backend_nginx
+    restart: always
+    environment:
+      - VIRTUAL_HOST=data.lpb-air.com
+      - LETSENCRYPT_HOST=data.lpb-air.com
+    expose: 
+      - "80"
+  # php fast-cgi
+  php:
+    image: php:7-fpm
+    container_name: php-fpm
+    restart: always
+    volumes:
+      - ./frontend/nginx:/air
+  # lpb-air
+  air:
+    image: nginx
+    container_name: lpb-air_nginx
+    restart: always
+    expose:
+      - "80"
+    volumes:
+      - ./frontend/nginx:/air:rw
+      - ./frontend/nginx.conf:/etc/nginx/conf.d/default.conf
+    environment:
+      - VIRTUAL_HOST=www.lpb-air.com,lpb-air.com
+      - LETSENCRYPT_HOST=www.lpb-air.com,lpb-air.com

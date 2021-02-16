@@ -1,0 +1,5 @@
+Flask
+flask-cors
+Flask-HTTPAuth
+uWSGI
+numpy
