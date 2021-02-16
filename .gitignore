@@ -5,5 +5,11 @@ __pycache__
 config
 config.h
 
+# env files
+postgres.env
+
 # frontend font files
 *.ttf
+
+# dynamic files
+**/dyn/*.json
