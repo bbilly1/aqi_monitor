@@ -1,3 +1,8 @@
 [aqi_monitor]
 authUsername = username
 authPassword = password
+
+[openweathermap]
+api_key = xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+lat = 40.71
+lon = -73.99

@@ -1,5 +1,7 @@
+apscheduler
 Flask
 flask-cors
 Flask-HTTPAuth
-uWSGI
 numpy
+requests
+uWSGI

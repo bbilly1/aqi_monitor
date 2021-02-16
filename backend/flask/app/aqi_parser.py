@@ -2,28 +2,39 @@ import json
 from datetime import datetime
 import numpy as np
 
+
 def input_process(data):
-    # parse string
-    # print(data)
-    # print('type' + type(data))
+    """ 
+    parsing aqi post data and combine it with weather data
+    """
+    # get weather data
+    try:
+        with open('dyn/weather.json', 'r') as f:
+            weather_data = f.read()
+        weather_data_json = json.loads(weather_data)
+        del weather_data_json['timestamp']
+        del weather_data_json['epoch_time']
+    except FileNotFoundError:
+        # will get recreated on next run
+        weather_data_json = {}
+    # parse aqi data
     json_dict = data
-
     pm25 = json_dict['pm25']
-
     aqi, aqi_category = get_AQI(pm25)
     json_dict['aqi_value'] = float(aqi)
     json_dict['aqi_category'] = aqi_category
-
+    # set timestamp
     now = datetime.now()
     timestamp = now.strftime("%Y-%m-%d %H:%M:%S")
     epoch_time = int(now.strftime('%s'))
-
     json_dict['timestamp'] = timestamp
     json_dict['epoch_time'] = epoch_time
+    # combine the two
+    json_dict.update(weather_data_json)
 
-    new_string = json.dumps(json_dict)
+    aqi_string = json.dumps(json_dict)
 
-    return new_string
+    return aqi_string
 
 
 def get_AQI(pm25):
