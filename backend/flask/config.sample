@@ -6,3 +6,9 @@ authPassword = password
 api_key = xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 lat = 40.71
 lon = -73.99
+
+[postgres]
+db_host = postgres
+db_database = aqi
+db_user = aqi
+db_password = aaaaaaaaaaaaaaaaa

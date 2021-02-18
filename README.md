@@ -15,7 +15,8 @@ Connected to that is:
 * BME280: Pressure Humidity Temperature Sensor Module.
 
 ## backend
-A [flask](https://pypi.org/project/Flask/) based application that takes the data from the ESP8266 for processing and storage.
+A [flask](https://pypi.org/project/Flask/) based application that takes the data from the ESP8266 for processing and storage.  
+[Postgres](https://www.postgresql.org/) handles the storage of the measurements. The data is split up into two different tables, one for aqi related data and one for the weather data.
 
 ## frontend
 A simple web site that gets AQI values from the backend to publish it nicely to see. Mostly build with HTML/CSS/JS and a little bit of PHP.
