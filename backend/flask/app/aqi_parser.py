@@ -6,6 +6,7 @@ import numpy as np
 def input_process(data):
     """ 
     parsing aqi post data and combine it with weather data
+    return: dict of combined values
     """
     # get weather data
     try:
@@ -29,15 +30,13 @@ def input_process(data):
     epoch_time = int(now.strftime('%s'))
     json_dict['timestamp'] = timestamp
     json_dict['epoch_time'] = epoch_time
-    # combine the two
+    # combine the two and return
     json_dict.update(weather_data_json)
-
-    aqi_string = json.dumps(json_dict)
-
-    return aqi_string
+    return json_dict
 
 
 def get_AQI(pm25):
+    """ takes the pm2.5 value and returns AQI and AQI category """
     if pm25 <= 12:
         aqi = (pm25 / 12) * 50
         aqi_category = "Good"
