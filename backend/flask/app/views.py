@@ -41,7 +41,7 @@ USER_DATA[config['authUsername']] = config['authPassword']
 scheduler = BackgroundScheduler()
 scheduler.start()
 scheduler.add_job(
-    weather.handle_weather, args=[config], trigger="interval", name='weather_api', seconds=300
+    weather.handle_weather, args=[config], trigger="interval", name='weather_api', seconds=900
 )
 
 
