@@ -29,13 +29,14 @@ var colorConfig =
         "invert(31%) sepia(8%) saturate(2659%) hue-rotate(268deg) brightness(91%) contrast(88%)"]
 }
 
+
 function startInterval() {
     refreshAqiValues();
     setInterval("refreshAqiValues();",60000);
 }
 
 
-// wrap for setAqiValues
+// wrap for interval
 function refreshAqiValues() {
     var req = new XMLHttpRequest();
     req.responseType = 'json';
@@ -47,7 +48,8 @@ function refreshAqiValues() {
         var aqiValue = responseAqi['aqi_value'];
         var aqiCategory = responseAqi['aqi_category'];
         setAqiValues(timestamp,aqiValue,aqiCategory);
-        setAqiColors(aqiCategory)
+        setAqiColors(aqiCategory);
+        setWeatherDetails(responseAqi);
     };
     req.send();
 }
@@ -65,13 +67,49 @@ function setAqiColors(aqiCategory) {
     var colMain = colorConfig[aqiCategory][0];
     var colSecond = colorConfig[aqiCategory][1];
     var colFilter = colorConfig[aqiCategory][2];
-    // apply main col
+    // apply topbox col
     document.getElementById('colorbox').style.backgroundColor = colMain;
+    // apply border col
+    var colBorder = document.getElementsByClassName('col_border');
+    for (var i = 0; i < colBorder.length; i++) {
+        colBorder[i].style.borderColor = colMain;
+    };
     // apply light background change
     var lightBg = document.getElementsByClassName('light_background');
-    for(var i = 0; i < lightBg.length; i++) {
+    for (var i = 0; i < lightBg.length; i++) {
         lightBg[i].style.backgroundColor = colSecond;
     };
-    // apply cloud
-    document.getElementById('cloud').style.filter = colFilter;
+    // apply color filter
+    var colFilterElements = document.getElementsByClassName('col_filter');
+    for (var i = 0; i < colFilterElements.length; i++) {
+        colFilterElements[i].style.filter = colFilter;
+    };
+    // apply font color
+    var colFontElements = document.getElementsByClassName('col_font');
+    for (var i = 0; i < colFontElements.length; i++) {
+        colFontElements[i].style.color = colMain;
+    };
+}
+
+function setWeatherDetails(responseAqi) {
+    // parse response
+    var weatherIcon = responseAqi['weather_icon'];
+    var weatherName = responseAqi['weather_name'];
+    var temperature = Math.round(responseAqi['temperature'] * 10) / 10
+    var windSpeed = responseAqi['wind_speed'];
+    var humidity = Math.round(responseAqi['humidity']);
+    var pressure = Math.round(responseAqi['pressure']);
+    // weather icon
+    weatherIconSrc = '/img/icon/' + weatherIcon + '.png';
+    document.getElementById('weather_icon').src = weatherIconSrc;
+    // weather name
+    document.getElementById('weather_name').innerHTML = weatherName;
+    // temperature
+    document.getElementById('temperature').innerHTML = temperature;
+    // wind speed
+    document.getElementById('wind_speed').innerHTML = windSpeed;
+    // humidity
+    document.getElementById('humidity').innerHTML = humidity;
+    // pressure
+    document.getElementById('pressure').innerHTML = pressure;
 }

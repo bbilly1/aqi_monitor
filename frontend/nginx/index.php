@@ -18,10 +18,50 @@
                 <p>Last updated: <span id="timestamp"></span></p>
             </div>
             <div class="cloud">
-                <img src="/img/cloud.png" alt="cloud" id="cloud">
+                <img src="/img/cloud.png" alt="cloud" class="col_filter">
                 <div class="aqi_box">
                     <h1 id="aqiValue"></h1>
                     <h2 id="aqiCategory"></h2>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="weather_wrap">
+        <div class="weather_content">
+            <div class="weather_box col_border">
+                <div class="weather_icon">
+                    <img src="/img/icon/000.png" alt="weather_icon" class="col_filter" id="weather_icon">
+                </div>
+                <div class="weather_text">
+                    <h3 class="col_font"><span id="temperature"></span><span> °C</span></h3>
+                    <p id="weather_name"></p>
+                </div>
+            </div>
+            <div class="weather_box col_border">
+                <div class="weather_icon">
+                    <img src="/img/icon/wind.png" alt="wind_icon" class="col_filter">
+                </div>
+                <div class="weather_text">
+                    <h3 class="col_font">Wind</h3>
+                    <p><span id="wind_speed"></span><span> km/h</span></p>
+                </div>
+            </div>
+            <div class="weather_box col_border">
+                <div class="weather_icon">
+                    <img src="/img/icon/humidity.png" alt="humidity_icon" class="col_filter">
+                </div>
+                <div class="weather_text">
+                    <h3 class="col_font">Humidity</h3>
+                    <p><span id="humidity"></span><span> %</span></p>
+                </div>
+            </div>
+            <div class="weather_box col_border">
+                <div class="weather_icon">
+                    <img src="/img/icon/pressure.png" alt="pressure_icon" class="col_filter">
+                </div>
+                <div class="weather_text">
+                    <h3 class="col_font">Pressure</h3>
+                    <p><span id="pressure"></span><span> mbar</span></p>
                 </div>
             </div>
         </div>

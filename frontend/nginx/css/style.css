@@ -27,8 +27,22 @@ h2 {
     font-family: Rubik-Light;
 }
 
+h3 {
+    font-family: Rubik-Bold;
+    font-size: 1.3em;
+}
+
 p {
     font-family: Rubik-Regular;
+}
+
+.top_content,
+.weather_content,
+.tagline_content {
+    width: 70%;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .colorbox {
@@ -39,13 +53,6 @@ p {
 
 .title {
     padding: 30px 0;
-}
-
-.top_content, .tagline_content {
-    width: 70%;
-    max-width: 800px;
-    margin-left: auto;
-    margin-right: auto;
 }
 
 .cloud {
@@ -59,20 +66,64 @@ p {
 
 .aqi_box {
     position: absolute;
-    top: 50%;
-    left: 50%;
+    top: 45%;
+    left: 55%;
     text-align: right;
     transform: translate(-50%, -50%);
     color: #fff;
 }
 
 .aqi_box h1 {
-    font-size: 10em;
+    font-size: 15em;
     margin: 0;
 }
 
 .aqi_box h2 {
+    font-size: 2em;
     margin: 0;
+}
+
+/* weather styling */
+.weather_wrap {
+    margin: 40px 0;
+}
+
+.weather_box {
+    border: solid 2px;
+    border-radius: 20px;
+    height: 100px;
+    position: relative;
+}
+
+.weather_content {
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    grid-column-gap: 10px;
+}
+
+.weather_icon {
+    width: 25%;
+    padding: 10px;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.weather_icon img {
+    width: 60px;
+}
+
+.weather_text {
+    width: 60%;
+    position: absolute;
+    top: 50%;
+    left: 40%;
+    transform: translateY(-50%);
+}
+
+.weather_text h3,
+.weather_text p {
+    margin: 10px 0;
 }
 
 .tagline_content {
@@ -80,7 +131,15 @@ p {
 }
 
 /* responsiv */
-@media screen and (max-width: 700px) {
+@media screen and (max-width: 1100px) {
+    .top_content, 
+    .tagline_content,
+    .weather_content {
+        width: 90%;
+    }
+}
+
+@media screen and (max-width: 800px) {
     h1 {
         font-size: 2.5em;
     }
@@ -90,10 +149,31 @@ p {
     .title {
         padding: 30px 0 0 0;
     }
-    .top_content, .tagline_content {
-        width: 90%;
+    .aqi_box {
+        width: 85%;
+        top: 40%;
+        text-align: center;
     }
     .aqi_box h1 {
-        font-size: 7em;
+        font-size: 6em;
+    }
+    .aqi_box h2 {
+        font-size: 1.5em;
+    }
+    .weather_content {
+        grid-template-columns: auto auto;
+        grid-row-gap: 10px;
+    }
+    .weather_icon {
+        padding: 5px;
+    }
+    .weather_icon img {
+        width: 100%;
+    }
+    .weather_text {
+        left: 32%;
+    }
+    .weather_text h3 {
+        font-size: 1.2;
     }
 }
