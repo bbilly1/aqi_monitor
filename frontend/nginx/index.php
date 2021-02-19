@@ -66,6 +66,42 @@
             </div>
         </div>
     </div>
+    <div class="desc_wrap light_background">
+        <div class="desc_content">
+            <div class="desc_box">
+                <div class="desc_item_wrap">
+                    <div class="desc_item good">
+                        <p>GOOD</p>
+                    </div>
+                    <div class="desc_item moderate">
+                        <p>MODERATE</p>
+                    </div>
+                    <div class="desc_item ufsg">
+                        <p>UNHEALTHY FOR SENSITIVE GROUPS</p>
+                    </div>
+                    <div class="desc_item unhealthy">
+                        <p>UNHEALTHY</p>
+                    </div>
+                    <div class="desc_item vunhealthy">
+                        <p>VERY UNHEALTHY</p>
+                    </div>
+                    <div class="desc_item hazardous">
+                        <p>HAZARDOUS</p>
+                    </div>
+                </div>
+            </div>
+            <div class="desc_box">
+                <div class="category_icon">
+                    <img src="/img/icon/category-plain.png" alt="category_icon" id="categoryIcon">
+                </div>
+            </div>
+            <div class="desc_box">
+                <h2 class="col_font" id="aqiName"></h2>
+                <h3 id="aqiRange"></h3>
+                <p id="aqiDesc">Good: No health concerns, enjoy activities.</p>
+            </div>
+        </div>
+    </div>
     <div class="tagline_wrap">
         <div class="tagline_content">
             <h1>More is coming soon here!</h1>

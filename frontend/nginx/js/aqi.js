@@ -6,27 +6,45 @@ var colorConfig =
     // green
     'Good': [
         "#85a762", "#dbe4d1",
-        "invert(66%) sepia(11%) saturate(1318%) hue-rotate(47deg) brightness(92%) contrast(86%)"], 
+        "invert(66%) sepia(11%) saturate(1318%) hue-rotate(47deg) brightness(92%) contrast(86%)",
+        "AQI 0 to 50",
+        "Good: No health concerns, enjoy activities."
+    ], 
     // yellow
     'Moderate': [
         "#d4b93c", "#f9f0c7",
-        "invert(79%) sepia(5%) saturate(4660%) hue-rotate(9deg) brightness(89%) contrast(103%)"], 
+        "invert(79%) sepia(5%) saturate(4660%) hue-rotate(9deg) brightness(89%) contrast(103%)",
+        "AQI 51 - 100:",
+        "Moderate: Active children and adults, and people with respiratory disease, such as asthma, should limit prolonged outdoor exertion."
+    ], 
     // orange
     'Unhealthy for Sensitive Groups': [
         "#e96843", "#f8d0c8",
-        "invert(61%) sepia(93%) saturate(3252%) hue-rotate(333deg) brightness(95%) contrast(91%)"],
+        "invert(61%) sepia(93%) saturate(3252%) hue-rotate(333deg) brightness(95%) contrast(91%)",
+        "AQI 101 - 150:",
+        "Unhealthy for Sensitive Groups: Active children and adults, and people with respiratory disease, such as asthma, should limit prolonged outdoor exertion."
+    ],
     // red
     'Unhealthy': [
         "#d03f3b", "#f1c5c4",
-        "invert(39%) sepia(16%) saturate(2264%) hue-rotate(314deg) brightness(97%) contrast(110%)"],
+        "invert(39%) sepia(16%) saturate(2264%) hue-rotate(314deg) brightness(97%) contrast(110%)",
+        "AQI 151 - 200:",
+        "Unhealthy: Everyone may begin to experience health effects: Active children and adults, and people with respiratory disease, such as asthma, should avoid prolonged outdoor exertion; everyone else, especially children, should limit prolonged outdoor exertion."
+    ],
     // pink
     'Very Unhealthy': [
         "#be4173", "#e9c9d6",
-        "invert(45%) sepia(32%) saturate(3238%) hue-rotate(308deg) brightness(77%) contrast(90%)"],
+        "invert(45%) sepia(32%) saturate(3238%) hue-rotate(308deg) brightness(77%) contrast(90%)",
+        "AQI 201 - 300:",
+        "Very Unhealthy: Active children and adults, and people with respiratory disease, such as asthma, should avoid all outdoor exertion; everyone else, especially children, should limit outdoor exertion."
+    ],
     // violet
     'Hazardous': [
         "#714261", "#d7c6d0",
-        "invert(31%) sepia(8%) saturate(2659%) hue-rotate(268deg) brightness(91%) contrast(88%)"]
+        "invert(31%) sepia(8%) saturate(2659%) hue-rotate(268deg) brightness(91%) contrast(88%)",
+        "AQI 301 - 500:",
+        "Hazardous: Everyone should avoid all outdoor exertion."
+    ]
 }
 
 
@@ -50,6 +68,7 @@ function refreshAqiValues() {
         setAqiValues(timestamp,aqiValue,aqiCategory);
         setAqiColors(aqiCategory);
         setWeatherDetails(responseAqi);
+        setDesc(responseAqi);
     };
     req.send();
 }
@@ -112,4 +131,30 @@ function setWeatherDetails(responseAqi) {
     document.getElementById('humidity').innerHTML = humidity;
     // pressure
     document.getElementById('pressure').innerHTML = pressure;
+}
+
+function setDesc(responseAqi) {
+    // parse response
+    var aqiCategory = responseAqi['aqi_category'];
+    var aqiCatClean = aqiCategory.toLowerCase().replaceAll(' ', '');
+    var iconSrc = '/img/icon/category-' + aqiCatClean + ".png";
+    // parse config
+    var aqiRange = colorConfig[aqiCategory][3];
+    var aqiDesc = colorConfig[aqiCategory][4];
+    // set values
+    document.getElementById('categoryIcon').src = iconSrc;
+    document.getElementById('aqiName').innerHTML = aqiCategory;
+    document.getElementById('aqiRange').innerHTML = aqiRange;
+    document.getElementById('aqiDesc').innerHTML = aqiDesc;
+    // remove active if any
+    var active = document.querySelector(".active");
+    if (active) {
+        active.classList.remove("active");
+    };
+    // figure out which to activate
+    var allCategories = Object.keys(colorConfig);
+    var indexMatch = allCategories.indexOf(aqiCategory);
+    var activeCat = document.getElementsByClassName('desc_item')[indexMatch];
+    // activate
+    activeCat.classList.add("active");
 }

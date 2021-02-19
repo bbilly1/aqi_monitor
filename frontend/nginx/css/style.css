@@ -24,21 +24,23 @@ h1 {
 }
 
 h2 {
-    font-family: Rubik-Light;
+    font-family: Rubik-Bold;
 }
 
 h3 {
-    font-family: Rubik-Bold;
+    font-family: Rubik-Light;
     font-size: 1.3em;
 }
 
 p {
     font-family: Rubik-Regular;
+    font-size: 1.1em;
 }
 
 .top_content,
 .weather_content,
-.tagline_content {
+.tagline_content,
+.desc_content {
     width: 70%;
     max-width: 900px;
     margin-left: auto;
@@ -126,8 +128,77 @@ p {
     margin: 10px 0;
 }
 
+/* descriptions */
+.desc_wrap {
+    margin: 40px 0;
+    padding: 30px 0;
+}
+
+.desc_content {
+    display: grid;
+    grid-template-columns: 33% 33% 33%;
+    grid-column-gap: 10px;
+}
+
+.desc_box {
+    margin: auto;
+}
+
+.desc_item_wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.desc_item {
+    padding: 8px 10px;
+    margin: 10px;
+    color: #fff;
+    text-align: center;
+    width: 200px;
+    transform: scale(1);
+    transition-timing-function: ease;
+    -webkit-transition: transform 2s;
+    -moz-transition: transform 2s;
+    -ms-transition: transform 2s;
+    -o-transition: transform 2s;
+    transition: transform 2s;
+}
+
+.good {
+    background-color: #85a762;
+}
+.moderate {
+    background-color: #d4b93c;
+}
+.ufsg {
+    background-color: #e96843;
+}
+.unhealthy {
+    background-color: #d03f3b;
+}
+.vunhealthy {
+    background-color: #be4173;
+}
+.hazardous {
+    background-color: #714261;
+}
+
+.category_icon img {
+    width: 100%;
+}
+
 .tagline_content {
     text-align: center;
+}
+
+.desc_item.active {
+    transform: scale(1.2);
+    font-size: 1.2em;
+    box-shadow: darkgray 5px 5px;
+    font-weight: bold;
+    
 }
 
 /* responsiv */
@@ -175,5 +246,8 @@ p {
     }
     .weather_text h3 {
         font-size: 1.2;
+    }
+    .desc_content {
+        display: block;
     }
 }
