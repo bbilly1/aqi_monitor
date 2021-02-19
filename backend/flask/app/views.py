@@ -66,15 +66,19 @@ def ingest():
     data = request.json
     if data:
         # populate data dict
-        json_dict = aqi_parser.input_process(data)
-        # save to db
-        time_stamp = db_insert.db_connect(config, json_dict)
-        print(f'db insert done at {time_stamp}')
-        # save to webserver
-        data = json.dumps(json_dict)
-        with open('dyn/air.json', 'w') as f:
-            f.write(data)
-        print(data)
+        json_dict, error_found = aqi_parser.input_process(data)
+        if error_found:
+            print('pm25 read failed')
+            print(json_dict)
+        else:
+            # save to db
+            time_stamp = db_insert.db_connect(config, json_dict)
+            print(f'db insert done at {time_stamp}')
+            # save to webserver
+            data = json.dumps(json_dict)
+            with open('dyn/air.json', 'w') as f:
+                f.write(data)
+            print(data)
     return 'ingest'
 
 

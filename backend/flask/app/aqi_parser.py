@@ -8,6 +8,8 @@ def input_process(data):
     parsing aqi post data and combine it with weather data
     return: dict of combined values
     """
+    # error check
+    error_found = False
     # get weather data
     try:
         with open('dyn/weather.json', 'r') as f:
@@ -24,6 +26,9 @@ def input_process(data):
     aqi, aqi_category = get_AQI(pm25)
     json_dict['aqi_value'] = float(aqi)
     json_dict['aqi_category'] = aqi_category
+    if pm25 == 0:
+        # something went wrong
+        error_found = True
     # set timestamp
     now = datetime.now()
     timestamp = now.strftime("%Y-%m-%d %H:%M:%S")
@@ -32,7 +37,7 @@ def input_process(data):
     json_dict['epoch_time'] = epoch_time
     # combine the two and return
     json_dict.update(weather_data_json)
-    return json_dict
+    return json_dict, error_found
 
 
 def get_AQI(pm25):
