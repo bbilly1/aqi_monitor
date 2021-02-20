@@ -11,6 +11,7 @@ services:
       - ./volume/nginx-proxy/dhparam:/etc/nginx/dhparam
       - ./volume/nginx-proxy/vhost:/etc/nginx/vhost.d
       - ./volume/nginx-proxy/certs:/etc/nginx/certs
+      - ./volume/nginx-proxy/acme:/etc/acme.sh
       - /run/docker.sock:/var/run/docker.sock:ro
     environment:
       - NGINX_PROXY_CONTAINER=nginx-proxy
