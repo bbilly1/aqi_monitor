@@ -6,7 +6,8 @@
 #include "base64.h"
 
 // wifi
-#include <ESP8266WiFiMulti.h>
+#include <ESP8266WiFi.h>
+
 #include <WiFiClient.h>
 #include <WiFiClientSecure.h>
 
@@ -32,7 +33,6 @@
 // initiate devices
 NovaSDS011 sds011;
 Adafruit_BME280 bme(BME_CS, BME_MOSI, BME_MISO, BME_SCK); // software SPI
-ESP8266WiFiMulti WiFiMulti;
 
 
 // build base64 auth string
@@ -60,6 +60,7 @@ void setup() {
   } else {
     Serial.println("FAIL: Unable to set Duty Cycle");
   }
+  delay(1000);
 
   // BME setup
   // default settings
@@ -70,19 +71,27 @@ void setup() {
   }
 
   // wifi setup
-  WiFi.mode(WIFI_STA);
-  WiFi.begin(ssid, password);
+  Serial.println("connecting to wifi");
 
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-    Serial.print(".");
-  }
-  Serial.println("");
-  Serial.println("WiFi connected");
-  Serial.println("IP address: ");
-  Serial.println(WiFi.localIP());
-  Serial.println();
+  WiFiClient client;
+  WiFi.begin(ssid, password);
   
+  int retries = 0;
+  while ((WiFi.status() != WL_CONNECTED) && (retries < 20)) {
+     retries++;
+     delay(1000);
+     Serial.print(".");
+  }
+  if (retries >= 20) {
+    Serial.println(F("WiFi connection FAILED"));
+  }
+  if (WiFi.status() == WL_CONNECTED) {
+    Serial.println(F("WiFi connected!"));
+    Serial.println("IP address: ");
+    Serial.println(WiFi.localIP());
+  }
+  Serial.println(F("Setup ready"));
+
 }
 
 
