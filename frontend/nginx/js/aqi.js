@@ -67,18 +67,36 @@ function refreshAqiValues() {
         var aqiCategory = responseAqi['aqi_category'];
         setAqiValues(timestamp,aqiValue,aqiCategory);
         setAqiColors(aqiCategory);
-        setWeatherDetails(responseAqi);
-        setDesc(responseAqi);
+        try {
+            setWeatherDetails(responseAqi);
+        } catch(e) {
+            // console.log('no weather box found');
+        };
+        try {
+            setDesc(responseAqi);
+        } catch(e) {
+            // console.log('no desc box found');
+        };
     };
     req.send();
 }
 
 function setAqiValues(timestamp,aqiValue,aqiCategory) {
 
-    document.getElementById('aqiValue').innerHTML = aqiValue;
-    document.getElementById('aqiCategory').innerHTML = aqiCategory;
-    document.getElementById('timestamp').innerHTML = timestamp;
+    var aqiValueField = document.getElementById('aqiValue');
+    if (aqiValueField) {
+        aqiValueField.innerHTML = aqiValue;
+    };
 
+    var aqiCategoryField = document.getElementById('aqiCategory');
+    if (aqiCategoryField) {
+        aqiCategoryField.innerHTML = aqiCategory;
+    };
+
+    var timestampField = document.getElementById('timestamp');
+    if (timestampField) {
+        timestampField.innerHTML = timestamp;
+    };
 }
 
 function setAqiColors(aqiCategory) {
@@ -87,27 +105,43 @@ function setAqiColors(aqiCategory) {
     var colSecond = colorConfig[aqiCategory][1];
     var colFilter = colorConfig[aqiCategory][2];
     // apply topbox col
-    document.getElementById('colorbox').style.backgroundColor = colMain;
+    var colorboxList = document.getElementsByClassName('colorbox');
+    for (var i = 0; i < colorboxList.length; i++) {
+        colorboxList[i].style.backgroundColor = colMain;
+    }
     // apply border col
     var colBorder = document.getElementsByClassName('col_border');
-    for (var i = 0; i < colBorder.length; i++) {
-        colBorder[i].style.borderColor = colMain;
-    };
+    if (colBorder) {
+        for (var i = 0; i < colBorder.length; i++) {
+            colBorder[i].style.borderColor = colMain;
+        };
+    }
     // apply light background change
     var lightBg = document.getElementsByClassName('light_background');
-    for (var i = 0; i < lightBg.length; i++) {
-        lightBg[i].style.backgroundColor = colSecond;
-    };
+    if (lightBg) {
+        for (var i = 0; i < lightBg.length; i++) {
+            lightBg[i].style.backgroundColor = colSecond;
+        };
+    }
     // apply color filter
     var colFilterElements = document.getElementsByClassName('col_filter');
-    for (var i = 0; i < colFilterElements.length; i++) {
-        colFilterElements[i].style.filter = colFilter;
-    };
+    if (colFilterElements) {
+        for (var i = 0; i < colFilterElements.length; i++) {
+            colFilterElements[i].style.filter = colFilter;
+        };
+    }
     // apply font color
     var colFontElements = document.getElementsByClassName('col_font');
-    for (var i = 0; i < colFontElements.length; i++) {
-        colFontElements[i].style.color = colMain;
-    };
+    if (colFontElements) {
+        for (var i = 0; i < colFontElements.length; i++) {
+            colFontElements[i].style.color = colMain;
+        };
+    }
+    // apply hover color
+    var css = '.nav li:hover {background-color: ' + colMain + ';}';
+    var style = document.createElement('style');
+    style.appendChild(document.createTextNode(css));
+    document.getElementsByTagName('head')[0].appendChild(style);
 }
 
 function setWeatherDetails(responseAqi) {
