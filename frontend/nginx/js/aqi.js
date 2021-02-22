@@ -58,7 +58,7 @@ function startInterval() {
 function refreshAqiValues() {
     var req = new XMLHttpRequest();
     req.responseType = 'json';
-    req.open('GET', 'https://data.lpb-air.com', true);
+    req.open('GET', '/dyn/air.json', true);
     req.setRequestHeader('cache-control', 'no-cache');
     req.onload  = function() {
         var responseAqi = req.response;

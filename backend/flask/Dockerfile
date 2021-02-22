@@ -4,6 +4,8 @@ FROM python
 # Set the working directory to /app
 WORKDIR /app
 
+VOLUME /app/dyn
+
 # Copy the current directory contents into the container at /app 
 ADD . /app
 

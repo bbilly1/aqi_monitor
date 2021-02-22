@@ -1,6 +1,5 @@
 apscheduler
 Flask
-flask-cors
 Flask-HTTPAuth
 numpy
 psycopg2-binary

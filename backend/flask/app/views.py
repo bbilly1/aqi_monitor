@@ -1,7 +1,6 @@
 import configparser
 import json
 
-from flask_cors import CORS
 from flask import request
 from flask_httpauth import HTTPBasicAuth
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -12,7 +11,6 @@ from app import aqi_parser
 from app import weather
 from app import db_insert
 
-cors = CORS(app, resources={r"/": {"origins": "*"}})
 auth = HTTPBasicAuth()
 
 
