@@ -110,7 +110,8 @@ a {
 }
 
 .aqi_box h2 {
-    font-size: 2em;
+    font-family: Rubik-Light;
+    font-size: 1.8em;
     margin: 0;
 }
 
@@ -133,7 +134,7 @@ a {
 }
 
 .weather_icon {
-    width: 25%;
+    width: 50px;
     padding: 10px;
     position: absolute;
     top: 50%;
@@ -141,7 +142,7 @@ a {
 }
 
 .weather_icon img {
-    width: 60px;
+    width: 100%;
 }
 
 .weather_text {
@@ -184,7 +185,7 @@ a {
 
 .desc_item {
     padding: 8px 10px;
-    margin: 10px;
+    margin: 4px;
     color: #fff;
     text-align: center;
     width: 200px;
@@ -216,6 +217,9 @@ a {
     background-color: #714261;
 }
 
+.category_icon {
+    padding: 30px;
+}
 .category_icon img {
     width: 100%;
 }
@@ -226,7 +230,8 @@ a {
 
 .desc_item.active {
     transform: scale(1.2);
-    font-size: 1.2em;
+    font-size: 1.1em;
+    margin: 15px;
     box-shadow: darkgray 5px 5px;
     font-weight: bold;   
 }
@@ -294,11 +299,28 @@ a {
     h1 {
         font-size: 2.5em;
     }
+    .top_content {
+        flex-direction: column-reverse;
+    }
+    .content {
+        width: 95%;
+    }
+    .nav {
+        flex-wrap: nowrap;
+    }
+    .nav li {
+        display: inline-flex;
+        padding: 5px 40px;
+    }
+    .nav ul {
+        margin: 10px auto 10px auto;
+        padding: 0;
+    }
     .title h1 {
         margin: 0;
     }
     .title {
-        padding: 30px 0 0 0;
+        padding: 0;
     }
     .aqi_box {
         width: 85%;
@@ -322,12 +344,18 @@ a {
         width: 100%;
     }
     .weather_text {
-        left: 32%;
+        left: 35%;
     }
     .weather_text h3 {
         font-size: 1.2;
     }
     .desc_content {
         display: block;
+    }
+    .desc_item {
+        padding: 0 10px;
+    }
+    .category_icon {
+        padding: 0 20%;
     }
 }
