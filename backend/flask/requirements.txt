@@ -1,7 +1,9 @@
 apscheduler
 Flask
 Flask-HTTPAuth
+matplotlib
 numpy
+pandas
 psycopg2-binary
 requests
 uWSGI

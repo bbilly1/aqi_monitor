@@ -9,9 +9,8 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from app import app
 from app import aqi_parser
 from app import weather
-from app import db_insert
-
-auth = HTTPBasicAuth()
+from app import graph
+from app.db_connect import db_insert
 
 
 def get_config():
@@ -35,8 +34,10 @@ def get_config():
 
 
 # start up
+auth = HTTPBasicAuth()
 config = get_config()
 weather.handle_weather(config)
+graph.create_current(config)
 # build username / pw dict for basic auth
 USER_DATA = {}
 USER_DATA[config['authUsername']] = config['authPassword']
@@ -44,10 +45,13 @@ USER_DATA[config['authUsername']] = config['authPassword']
 
 # start scheduler
 scheduler = BackgroundScheduler()
-scheduler.start()
 scheduler.add_job(
     weather.handle_weather, args=[config], trigger="interval", name='weather_api', seconds=900
 )
+scheduler.add_job(
+    graph.create_current, args=[config], trigger="cron", minute='*/5', name='current_graph'
+)
+scheduler.start()
 
 
 @auth.verify_password
@@ -70,7 +74,7 @@ def ingest():
             print(json_dict)
         else:
             # save to db
-            time_stamp = db_insert.db_connect(config, json_dict)
+            time_stamp = db_insert(config, json_dict)
             print(f'db insert done at {time_stamp}')
             # save to webserver
             data = json.dumps(json_dict)
