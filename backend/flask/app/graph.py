@@ -1,6 +1,6 @@
 """ makes the nice plots """
 
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from matplotlib import pyplot as plt
 import numpy as np
@@ -22,14 +22,20 @@ def create_current(config):
     conn, cur = db_connect(config)
     # get data
     cur.execute(
-        "SELECT epoch_time, aqi_value FROM aqi \
-        WHERE epoch_time > " + str(last_3h) + " ORDER BY epoch_time DESC \
-        LIMIT " + str(last_3h_limit) + ";")
+        f'SELECT epoch_time, aqi_value FROM aqi \
+        WHERE epoch_time > {last_3h} ORDER BY epoch_time DESC \
+        LIMIT {last_3h_limit};')
     rows = cur.fetchall()
     # close db
     db_close(conn, cur)
+    # set title
+    data_from = now.strftime("%Y-%m-%d")
+    time_from = datetime.fromtimestamp(rows[-1][0]).strftime('%H:%M')
+    time_until = datetime.fromtimestamp(rows[0][0]).strftime('%H:%M')
+    plt_title = f'AQI values from: {data_from} {time_from} - {time_until}'
     # parse rows
-    x, y, plt_title = build_plt(rows, now)
+    sample_rate = '3min'
+    x, y = build_plt(rows, sample_rate)
     # calc x_ticks
     x_ticks = []
     for num, i in enumerate(x):
@@ -37,12 +43,13 @@ def create_current(config):
         if minute % 15 == 0:
             x_ticks.append(num)
     # write plt
-    write_plt(x, y, plt_title, x_ticks)
+    file_name = 'current'
+    write_plt(x, y, plt_title, x_ticks, file_name)
     message = f'recreated current graph: {now_human}'
     print(message)
 
 
-def build_plt(rows, now):
+def build_plt(rows, sample_rate):
     """ parse rows returns axis"""
     # build x y
     x_timeline = [datetime.fromtimestamp(i[0]) for i in rows]
@@ -53,7 +60,7 @@ def build_plt(rows, now):
     # reindex as timeseries
     indexed = df.set_index('timestamp')
     indexed.sort_values(by=['timestamp'], inplace=True)
-    mean = indexed.resample('3min').mean()
+    mean = indexed.resample(sample_rate).mean()
     mean.reset_index(level=0, inplace=True)
     mean['timestamp'] = mean['timestamp'].dt.strftime('%H:%M')
     mean['aqi'] = mean['aqi'].round()
@@ -61,14 +68,10 @@ def build_plt(rows, now):
     x = mean['timestamp']
     y = mean['aqi']
     # build title
-    data_from = now.strftime("%Y-%m-%d")
-    time_from = x_timeline[-1].strftime('%H:%M')
-    time_until = x_timeline[0].strftime('%H:%M')
-    plt_title = f'AQI values from: {data_from} {time_from} - {time_until}'
-    return x, y, plt_title
+    return x, y
 
 
-def write_plt(x, y, plt_title, x_ticks):
+def write_plt(x, y, plt_title, x_ticks, file_name):
     """ save plot to file """
     # calc ticks
     y_max = np.ceil(y.max()/50)*50 + 50
@@ -86,5 +89,5 @@ def write_plt(x, y, plt_title, x_ticks):
     plt.yticks(np.arange(0, y_max, step=50))
     plt.title(plt_title)
     plt.tight_layout()
-    plt.savefig('dyn/current.png', dpi = 300)
+    plt.savefig(f'dyn/{file_name}.png', dpi = 300)
     plt.figure()
