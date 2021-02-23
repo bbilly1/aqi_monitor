@@ -55,8 +55,8 @@ void setup() {
   }
 
   // main loop speed
-  if (sds011.setDutyCycle(3)) {
-    Serial.println("SDS011 Duty Cycle set to 3min");
+  if (sds011.setDutyCycle(2)) {
+    Serial.println("SDS011 Duty Cycle set to 2min");
   } else {
     Serial.println("FAIL: Unable to set Duty Cycle");
   }
@@ -75,6 +75,7 @@ void setup() {
 
   WiFiClient client;
   WiFi.begin(ssid, password);
+  WiFi.setSleepMode(WIFI_NONE_SLEEP);
   
   int retries = 0;
   while ((WiFi.status() != WL_CONNECTED) && (retries < 20)) {
@@ -99,6 +100,7 @@ void loop() {
   // setup vars
   float pm25, pm10, temperature, pressure, humidity;
   int uptime;
+  int reconnects = 0;
   // wait until no errors to print values
   if (sds011.queryData(pm25, pm10) == QuerryError::no_error) {
 
@@ -169,6 +171,19 @@ void loop() {
       
       // wifi problems
       Serial.println("wifi not connected");
+      WiFi.disconnect();
+      WiFi.reconnect();
+      reconnects ++;
+      // try reconnecting
+      while (WiFi.status() != WL_CONNECTED && reconnects < 10 ) {
+        delay(2000);
+        Serial.print(".");
+        reconnects ++;
+      }
+      // restart if all failed
+      if (WiFi.status() == WL_CONNECTED) {
+        ESP.restart();
+      }
       
     }
     
