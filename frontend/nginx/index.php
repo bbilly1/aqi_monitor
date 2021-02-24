@@ -5,6 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/lightbox.css">
+    <script src="/js/lightbox.js"></script>
     <script src="/js/aqi.js"></script>
     <title>AQI</title>
 </head>
@@ -98,8 +100,13 @@
         </div>
     </div>
     <div class="block_wrap">
-        <div class="tagline_content content">
-            <h2>Some cool graphs are coming soon here!</h2>
+        <div class="graph2 content">
+            <div class="graph_item">
+                <h3>Last three hours</h3>
+                <a href="/dyn/current.png" data-lightbox="graph">
+                    <img src="/dyn/current.png" alt="current">
+                </a>
+            </div>
         </div>
     </div>
     <?php include($_SERVER['DOCUMENT_ROOT'] . '/incl/footer.html'); ?>

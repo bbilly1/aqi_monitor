@@ -81,6 +81,7 @@
         <div class="credits content">
             <h2>Credits</h2>
             <p>Partial Weather data, namely weather icon, weather description and windspeed are provided from <a href="https://openweathermap.org/ " target="_blank">openweather.org</a> API distributed under the <a href="https://openweathermap.org/full-price" target="_blank">Creative Commons Attribution-ShareAlike 4.0 Generic License</a>.</p>
+            <p><a target="_blank" href="https://github.com/lokesh/lightbox2">Lightbox</a> made by Lokesh Dhakar, released under the <a target="_blank" href="https://raw.githubusercontent.com/lokesh/lightbox2/master/LICENSE">MIT license</a>.</p>
         </div>
     </div>
     <?php include($_SERVER['DOCUMENT_ROOT'] . '/incl/footer.html'); ?>
