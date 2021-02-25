@@ -327,10 +327,10 @@ a {
     }
     .nav li {
         display: inline-flex;
-        padding: 5px 25px;
+        padding: 5px 20px;
     }
     .nav ul {
-        margin: 10px auto 10px auto;
+        margin: 10px auto;
         padding: 0;
     }
     .title h1 {
