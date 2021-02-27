@@ -107,6 +107,12 @@
                     <img src="/dyn/current.png" alt="current">
                 </a>
             </div>
+            <div class="graph_item">
+                <h3>Last 7 days</h3>
+                <a href="/dyn/last-7.png" data-lightbox="graph">
+                    <img src="/dyn/last-7.png" alt="last-7 days">
+                </a>
+            </div>
         </div>
     </div>
     <?php include($_SERVER['DOCUMENT_ROOT'] . '/incl/footer.html'); ?>

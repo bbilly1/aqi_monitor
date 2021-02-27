@@ -284,9 +284,7 @@ a {
 }
 
 .graph3 {
-    display: grid;
-    grid-template-columns: 33% 33% 33%;
-    grid-column-gap: 10px;
+    display: flex;
 }
 
 .graph_item img {
@@ -379,6 +377,6 @@ a {
         display: block;
     }
     .graph3 {
-        grid-template-columns: 100%;
+        flex-direction: column-reverse;
     }
 }
