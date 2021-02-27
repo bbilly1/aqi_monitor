@@ -39,6 +39,7 @@ config = get_config()
 weather.handle_weather(config)
 graph.create_current(config)
 graph.rebuild_3days(config)
+graph.rebuild_7days(config)
 # build username / pw dict for basic auth
 USER_DATA = {}
 USER_DATA[config['authUsername']] = config['authPassword']
@@ -54,6 +55,9 @@ scheduler.add_job(
 )
 scheduler.add_job(
     graph.rebuild_3days, args=[config], trigger="cron", day='*', hour='1', minute='3', name='3_days'
+)
+scheduler.add_job(
+    graph.rebuild_7days, args=[config], trigger="cron", day='*', hour='1', minute='4', name='7_days'
 )
 scheduler.start()
 

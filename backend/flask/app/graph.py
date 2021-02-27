@@ -35,7 +35,7 @@ def create_current(config):
     plt_title = f'AQI values from: {data_from} {time_from} - {time_until}'
     # parse rows
     sample_rate = '3min'
-    x, y = build_plt(rows, sample_rate)
+    x, y = build_plt(rows, sample_rate, '%H:%M')
     # calc x_ticks
     x_ticks = []
     for num, i in enumerate(x):
@@ -86,11 +86,45 @@ def get_axis(day, now, config):
     # build plt
     x_ticks = np.arange(0, 97, step=8)
     sample_rate = '15min'
-    x, y = build_plt(rows, sample_rate)
+    x, y = build_plt(rows, sample_rate, '%H:%M')
     return x, y, plt_title, x_ticks
 
 
-def build_plt(rows, sample_rate):
+def rebuild_7days(config):
+    """ recreate last-7 days from db """
+    # setup
+    file_name = 'last-7'
+    sample_rate = '2h'
+    now = datetime.now()
+    day_until = int(now.date().strftime('%s'))
+    day_from = day_until - 7 * 24 * 60 * 60
+    # get data
+    conn, cur = db_connect(config)
+    cur.execute(
+        f'SELECT epoch_time, aqi_value FROM aqi \
+        WHERE epoch_time > {day_from} \
+        AND epoch_time < {day_until} \
+        ORDER BY epoch_time DESC LIMIT 30 * 24 * 7;'
+    )
+    rows = cur.fetchall()
+    db_close(conn, cur)
+    # title
+    date_from = datetime.fromtimestamp(rows[-1][0]).strftime('%Y-%m-%d')
+    date_until = datetime.fromtimestamp(rows[0][0]).strftime('%Y-%m-%d')
+    plt_title = f'AQI values from: {date_from} until {date_until}'
+    # build x and y of plot
+    x, y = build_plt(rows, sample_rate, '%Y-%m-%d %H:%M')
+    # make ticks
+    x_range = np.arange(0, 84, step=12)
+    x_date_time = pd.to_datetime(x).dt.date.unique()
+    x_dates = np.asarray([i.strftime('%Y-%m-%d') for i in x_date_time])
+    x_ticks = x_range, x_dates
+    # write the plot
+    write_plt(x, y, plt_title, x_ticks, file_name)
+    print('recreaded last-7 days graph')
+
+
+def build_plt(rows, sample_rate, time_format):
     """ parse rows returns axis"""
     # build x y
     x_timeline = [datetime.fromtimestamp(i[0]) for i in rows]
@@ -103,7 +137,7 @@ def build_plt(rows, sample_rate):
     indexed.sort_values(by=['timestamp'], inplace=True)
     mean = indexed.resample(sample_rate).mean()
     mean.reset_index(level=0, inplace=True)
-    mean['timestamp'] = mean['timestamp'].dt.strftime('%H:%M')
+    mean['timestamp'] = mean['timestamp'].dt.strftime(time_format)
     mean['aqi'] = mean['aqi'].round()
     # set axis
     x = mean['timestamp']
@@ -127,7 +161,11 @@ def write_plt(x, y, plt_title, x_ticks, file_name, y_max=''):
     plt.fill_between(x, y, y2=200, where=(y > 200), color='#be4173', interpolate=True)          # vunhealthy
     plt.fill_between(x, y, y2=300, where=(y > 300), color='#714261', interpolate=True)          # hazardous
     plt.fill_between(x, y, y2=0, where=(y > 0), color='#ffffff', alpha=0.1, interpolate=True)   # soft
-    plt.xticks(x_ticks)
+    # handle passing ticks and lables separatly
+    if len(x_ticks) == 2:
+        plt.xticks(x_ticks[0], x_ticks[1])
+    else:
+        plt.xticks(x_ticks)
     plt.yticks(np.arange(0, y_max, step=50))
     plt.title(plt_title)
     plt.tight_layout()
