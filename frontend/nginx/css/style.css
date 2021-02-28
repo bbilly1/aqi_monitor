@@ -53,6 +53,10 @@ a {
     height: 40px;
     margin: 0;
     padding: 0;
+    position: sticky;
+    position: -webkit-sticky;
+    top: 0;
+    z-index: 1;
 }
 
 .top_content {
@@ -308,6 +312,18 @@ a {
     .weather_content {
         width: 90%;
     }
+    .desc_content {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .desc_box:nth-child(1) {
+        grid-column: span 1;
+        grid-row: span 2;
+    }
+    .desc_box:nth-child(2),
+    .desc_box:nth-child(3) {
+        grid-column: span 1;
+        grid-row: span 1;
+    }
 }
 
 @media screen and (max-width: 800px) {
@@ -369,6 +385,7 @@ a {
     }
     .desc_item {
         padding: 0 10px;
+        width: 50%;
     }
     .category_icon {
         padding: 0 20%;
