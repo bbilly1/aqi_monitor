@@ -16,7 +16,7 @@
         <div class="content">
             <h2>About</h2>
             <p>This page and its contents are still under construction. More content is coming soon.</p>
-            <p>The data for this page is collected from an air monitor located downtown Luang Prabang. While we do our best, no guarantee is given for the accuracy of this data.</p>
+            <p>The data for this page is collected from an air monitor located just outside of Luang Prabang, Laos. While we do our best, no guarantee is given for the accuracy of this data.</p>
             <p>The data is updated every 3 minutes. Contrary to international websites who measure the air pollution via satellite images and rely on estimates and averages, an on-site air monitor delivers real time values that paint a much more accurate picture of the local situation.</p>
             <p>Roughly, the Air Quality Index (AQI) is the internationally used air quality standard to measure the pollution of the air. It is divided into 6 levels, and according to these levels, certain health advices are given:</p>
         </div>

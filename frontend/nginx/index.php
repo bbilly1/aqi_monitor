@@ -9,6 +9,11 @@
     <script src="/js/lightbox.js"></script>
     <script src="/js/aqi.js"></script>
     <title>AQI</title>
+    <meta property="og:title" content="Live Air Quality in Luang Prabang Laos PDR" />
+    <meta property="og:url" content="https://www.lpb-air.com/" />
+    <meta property="og:image" content="https://www.lpb-air.com/img/social_preview.jpg" />
+    <meta property="og:type" content="website" />
+    <meta property="og:description" content="Real-time and on site air quality measurment and changes over time." />
 </head>
 <body>
     <div class="block_wrap light_background">
