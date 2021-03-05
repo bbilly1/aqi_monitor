@@ -93,8 +93,6 @@ def get_axis(day, now, config):
 def rebuild_7days(config):
     """ recreate last-7 days from db """
     # setup
-    file_name = 'last-7'
-    sample_rate = '2h'
     now = datetime.now()
     day_until = int(now.date().strftime('%s'))
     day_from = day_until - 7 * 24 * 60 * 60
@@ -112,15 +110,15 @@ def rebuild_7days(config):
     date_from = datetime.fromtimestamp(rows[-1][0]).strftime('%Y-%m-%d')
     date_until = datetime.fromtimestamp(rows[0][0]).strftime('%Y-%m-%d')
     plt_title = f'AQI values from: {date_from} until {date_until}'
-    # build x and y of plot
-    x, y = build_plt(rows, sample_rate, '%Y-%m-%d %H:%M')
+    # build axis of plot
+    x, y_1, y_2 = build_last7_plt(rows)
     # make ticks
     x_range = np.arange(0, 84, step=12)
     x_date_time = pd.to_datetime(x).dt.date.unique()
     x_dates = np.asarray([i.strftime('%Y-%m-%d') for i in x_date_time])
     x_ticks = x_range, x_dates
     # write the plot
-    write_plt(x, y, plt_title, x_ticks, file_name)
+    write_last7_plt(x, y_1, y_2, x_ticks, plt_title)
     print('recreaded last-7 days graph')
 
 
@@ -142,8 +140,36 @@ def build_plt(rows, sample_rate, time_format):
     # set axis
     x = mean['timestamp']
     y = mean['aqi']
-    # build title
     return x, y
+
+
+def build_last7_plt(rows):
+    """ build axis for last7 plot """
+    sample_rate = '2h'
+    # build x y
+    x_timeline = [datetime.fromtimestamp(i[0]) for i in rows]
+    y_aqi_values = [int(i[1]) for i in rows]
+    # build dataframe
+    data = {'timestamp': x_timeline, 'aqi': y_aqi_values}
+    df = pd.DataFrame(data)
+    indexed = df.set_index('timestamp')
+    indexed.sort_values(by=['timestamp'], inplace=True)
+    mean = indexed.resample(sample_rate).mean()
+    mean['avg'] = mean['aqi'].resample('1d').mean()
+    mean['avg'] = mean.avg.shift(6)
+
+    mean['avg'][0] = (mean['avg'].iloc[6] + mean['aqi'][0]) / 2
+    mean['avg'][-1] = (mean['avg'].iloc[-6] + mean['aqi'][-1]) / 2
+
+    mean['avg'].interpolate(method='polynomial', order=3, inplace=True)
+    mean.reset_index(level=0, inplace=True)
+    mean['timestamp'] = mean['timestamp'].dt.strftime('%Y-%m-%d %H:%M')
+    mean['aqi'] = mean['aqi'].round()
+    mean['avg'] = mean['avg'].round()
+    x = mean['timestamp']
+    y_1 = mean['aqi']
+    y_2 = mean['avg']
+    return x, y_1, y_2
 
 
 def write_plt(x, y, plt_title, x_ticks, file_name, y_max=''):
@@ -170,4 +196,27 @@ def write_plt(x, y, plt_title, x_ticks, file_name, y_max=''):
     plt.title(plt_title)
     plt.tight_layout()
     plt.savefig(f'dyn/{file_name}.png', dpi = 300)
+    plt.figure()
+
+
+def write_last7_plt(x, y_1, y_2, x_ticks, plt_title):
+    """ plot last-7 only """
+    y_max = np.ceil(max(y_1.append(y_2))/50)*50 + 50
+    # plot
+    plt.style.use('seaborn')
+    plt.plot(x, y_1, color='#313131', label='2hour avg')
+    plt.plot(x, y_2, color='#cc0000', label='daily avg')
+    plt.fill_between(x, y_1, y2=0, where=(y_1 > 0), color='#85a762', interpolate=True)              # good
+    plt.fill_between(x, y_1, y2=50, where=(y_1 > 50), color='#d4b93c', interpolate=True)            # moderate
+    plt.fill_between(x, y_1, y2=100, where=(y_1 > 100), color='#e96843', interpolate=True)          # ufsg
+    plt.fill_between(x, y_1, y2=150, where=(y_1 > 150), color='#d03f3b', interpolate=True)          # unhealthy
+    plt.fill_between(x, y_1, y2=200, where=(y_1 > 200), color='#be4173', interpolate=True)          # vunhealthy
+    plt.fill_between(x, y_1, y2=300, where=(y_1 > 300), color='#714261', interpolate=True)          # hazardous
+    plt.fill_between(x, y_1, y2=0, where=(y_1 > 0), color='#ffffff', alpha=0.1, interpolate=True)   # soft
+    plt.xticks(x_ticks[0], x_ticks[1])
+    plt.yticks(np.arange(0, y_max, step=50))
+    plt.title(plt_title)
+    plt.legend()
+    plt.tight_layout()
+    plt.savefig('dyn/last-7.png', dpi = 300)
     plt.figure()
