@@ -6,4 +6,5 @@ numpy
 pandas
 psycopg2-binary
 requests
+scipy
 uWSGI
