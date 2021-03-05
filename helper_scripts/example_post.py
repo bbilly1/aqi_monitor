@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-""" test script to post data to the ingest route """
+""" 
+script to post data to the ingest route with simulated data for testing
+
+"""
 
 import requests
 import json
