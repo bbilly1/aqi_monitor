@@ -102,7 +102,7 @@ a {
 .aqi_box {
     position: absolute;
     top: 45%;
-    left: 55%;
+    left: 57%;
     text-align: right;
     transform: translate(-50%, -50%);
     color: #fff;
@@ -359,7 +359,7 @@ a {
         text-align: center;
     }
     .aqi_box h1 {
-        font-size: 6em;
+        font-size: 5em;
     }
     .aqi_box h2 {
         font-size: 1.5em;
