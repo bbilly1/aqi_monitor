@@ -10,6 +10,7 @@ from app import app
 from app import aqi_parser
 from app import weather
 from app import graph
+from app import graph_pm
 from app.db_connect import db_insert
 
 
@@ -38,6 +39,7 @@ auth = HTTPBasicAuth()
 config = get_config()
 weather.handle_weather(config)
 graph.create_current(config)
+graph_pm.rebuild_pm_bar(config)
 graph.rebuild_3days(config)
 graph.rebuild_7days(config)
 # build username / pw dict for basic auth
@@ -54,10 +56,13 @@ scheduler.add_job(
     graph.create_current, args=[config], trigger="cron", minute='*/5', name='current_graph'
 )
 scheduler.add_job(
-    graph.rebuild_3days, args=[config], trigger="cron", day='*', hour='1', minute='3', name='3_days'
+    graph.rebuild_3days, args=[config], trigger="cron", day='*', hour='1', minute='1', name='3_days'
 )
 scheduler.add_job(
-    graph.rebuild_7days, args=[config], trigger="cron", day='*', hour='1', minute='4', name='7_days'
+    graph.rebuild_7days, args=[config], trigger="cron", day='*', hour='1', minute='2', name='7_days'
+)
+scheduler.add_job(
+    graph_pm.rebuild_pm_bar, args=[config], trigger="cron", day='*', hour='1', minute='3', name='pm_bar'
 )
 scheduler.start()
 
