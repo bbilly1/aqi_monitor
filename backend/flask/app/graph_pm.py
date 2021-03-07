@@ -66,14 +66,14 @@ def build_pm_plot(x, y, y_max, thresh, title):
         else:
             col.append('#cc0000')
     # title
-    plt_title = f'PM {title} values for last 10 days'
+    plt_title = f'Daily avg PM {title} exposure'
     # plot
     plt.style.use('seaborn')
     plt.bar(x_dates, y, color=col, width=0.5)
     plt.axhline(y=thresh, color='#00cc00', linestyle=':')
     plt.xticks(ticks=x_range, labels=x_dates)
     plt.yticks(np.arange(0, y_max, step=25))
-    plt.title(plt_title)
+    plt.title(plt_title, fontsize=20)
     plt.tight_layout()
     plt.savefig(f'dyn/pm{file_name}.png', dpi=300)
     plt.close('all')

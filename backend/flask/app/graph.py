@@ -29,10 +29,9 @@ def create_current(config):
     # close db
     db_close(conn, cur)
     # set title
-    data_from = now.strftime("%Y-%m-%d")
     time_from = datetime.fromtimestamp(rows[-1][0]).strftime('%H:%M')
     time_until = datetime.fromtimestamp(rows[0][0]).strftime('%H:%M')
-    plt_title = f'AQI values from: {data_from} {time_from} - {time_until}'
+    plt_title = f'AQI values last 3h: {time_from} - {time_until}'
     # parse rows
     sample_rate = '3min'
     x, y = build_plt(rows, sample_rate, '%H:%M')
@@ -193,7 +192,7 @@ def write_plt(x, y, plt_title, x_ticks, file_name, y_max=''):
     else:
         plt.xticks(x_ticks)
     plt.yticks(np.arange(0, y_max, step=50))
-    plt.title(plt_title)
+    plt.title(plt_title, fontsize=20)
     plt.tight_layout()
     plt.savefig(f'dyn/{file_name}.png', dpi = 300)
     plt.figure()
@@ -215,7 +214,7 @@ def write_last7_plt(x, y_1, y_2, x_ticks, plt_title):
     plt.fill_between(x, y_1, y2=0, where=(y_1 > 0), color='#ffffff', alpha=0.1, interpolate=True)   # soft
     plt.xticks(x_ticks[0], x_ticks[1])
     plt.yticks(np.arange(0, y_max, step=50))
-    plt.title(plt_title)
+    plt.title(plt_title, fontsize=20)
     plt.legend()
     plt.tight_layout()
     plt.savefig('dyn/last-7.png', dpi = 300)
