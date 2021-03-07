@@ -90,6 +90,14 @@ a {
     flex: 80%;
 }
 
+.divider {
+    padding: 30px 0;
+}
+
+.divider hr {
+    border: 2px solid;
+}
+
 .cloud {
     position: relative;
     padding-bottom: 30px;
