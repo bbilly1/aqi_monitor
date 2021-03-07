@@ -17,7 +17,7 @@
 </head>
 <body>
     <div class="block_wrap light_background">
-        <?php include($_SERVER['DOCUMENT_ROOT'] . '/incl/topnav.html'); ?>
+        <?php include($_SERVER['DOCUMENT_ROOT'] . '/incl/topnav.php'); ?>
         <div class="top_content content">
             <div class="cloud">
                 <img src="/img/cloud.png" alt="cloud" class="col_filter">
@@ -107,13 +107,13 @@
     <div class="block_wrap">
         <div class="graph2 content">
             <div class="graph_item">
-                <h3>Last three hours</h3>
+                <h3 id="last3">Last three hours</h3>
                 <a href="/dyn/current.png" data-lightbox="graph">
                     <img src="/dyn/current.png" alt="current">
                 </a>
             </div>
             <div class="graph_item">
-                <h3>Last 7 days</h3>
+                <h3 id=last7>Last 7 days</h3>
                 <a href="/dyn/last-7.png" data-lightbox="graph">
                     <img src="/dyn/last-7.png" alt="last-7 days">
                 </a>

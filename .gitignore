@@ -14,3 +14,4 @@ postgres.env
 # dynamic files
 **/dyn/*.json
 **/dyn/
+update.html

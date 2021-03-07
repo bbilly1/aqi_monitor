@@ -1,4 +1,6 @@
-<div class="colorbox" id="colorbox"></div>
+<div class="colorbox" id="colorbox">
+    <?php include($_SERVER['DOCUMENT_ROOT'] . '/incl/update.html'); ?>
+</div>
 <div class="top_content content">
     <div class="title">
         <h1>Live Air Quality</h1>

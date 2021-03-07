@@ -10,7 +10,7 @@
 </head>
 <body>
     <div class="block_wrap light_background">
-        <?php include($_SERVER['DOCUMENT_ROOT'] . '/incl/topnav.html'); ?>
+        <?php include($_SERVER['DOCUMENT_ROOT'] . '/incl/topnav.php'); ?>
     </div>
     <div class="block_wrap">
         <div class="content">
