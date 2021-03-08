@@ -42,6 +42,8 @@ graph.create_current(config)
 graph_pm.rebuild_pm_bar(config)
 graph.rebuild_3days(config)
 graph.rebuild_7days(config)
+graph_pm.rebuild_hour_bar(config)
+
 # build username / pw dict for basic auth
 USER_DATA = {}
 USER_DATA[config['authUsername']] = config['authPassword']
@@ -63,6 +65,9 @@ scheduler.add_job(
 )
 scheduler.add_job(
     graph_pm.rebuild_pm_bar, args=[config], trigger="cron", day='*', hour='1', minute='3', name='pm_bar'
+)
+scheduler.add_job(
+    graph_pm.rebuild_hour_bar, args=[config], trigger="cron", day='*', hour='1', minute='4', name='hour_bar'
 )
 scheduler.start()
 
