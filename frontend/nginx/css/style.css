@@ -49,6 +49,11 @@ a {
     margin-right: auto;
 }
 
+.content-date {
+    display: inline-block;
+    width: 90px;
+}
+
 .colorbox {
     color: #fff;
     min-height: 40px;

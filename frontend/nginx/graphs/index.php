@@ -80,6 +80,24 @@
         <div class="content divider">
             <hr class="col_border">
         </div>
+        <div class="content">
+            <h2 id="hour">Hour by Hour</h2>
+        </div>
+        <div class="graph2 content">
+            <div class="graph_item">
+                <a href="/dyn/hours.png" data-lightbox="hours-bar">
+                    <img src="/dyn/hours.png" alt="hours 10 bar chart">
+                </a>
+            </div>
+            <div>
+                <h3>Hourly AQI average</h3>
+                <p>The AQI value can change a lot during the day. This can depend on the wind, cooking on fire or just another additional source of pollution nearby.</p>
+                <p>In this chart you can see the average AQI for each hour. This data is based on the last three days. This data can help to visualize which hours in the past three hours have been better or worse on average.</p>
+            </div>
+        </div>
+        <div class="content divider">
+            <hr class="col_border">
+        </div>
     </div>
     <div class="block_wrap">
         <div class="tagline_content content">
