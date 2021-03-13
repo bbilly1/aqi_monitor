@@ -1,4 +1,11 @@
-document.addEventListener("DOMContentLoaded", startInterval);
+// main entry on load
+const startInterval = async () => {
+    await refreshAqiValues();
+    setInterval("refreshAqiValues();",60000);
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    rmPreload();
+}
+window.addEventListener('load', startInterval);
 
 
 var colorConfig = 
@@ -48,37 +55,47 @@ var colorConfig =
 }
 
 
-function startInterval() {
-    refreshAqiValues();
-    setInterval("refreshAqiValues();",60000);
+// remove preload cloud gif
+function rmPreload() {
+    const preload = document.querySelector('.preload');
+    preload.classList.add('preload-finish');
+    // scrollbar
+    document.querySelector('body').style.overflow = 'unset'
+    // sticky
+    const topBar = document.querySelector('.colorbox');
+    topBar.style.position = 'sticky';
+    topBar.style.position = '-webkit-sticky';
 }
 
 
 // wrap for interval
 function refreshAqiValues() {
-    var req = new XMLHttpRequest();
-    req.responseType = 'json';
-    req.open('GET', '/dyn/air.json', true);
-    req.setRequestHeader('cache-control', 'no-cache');
-    req.onload  = function() {
-        var responseAqi = req.response;
-        var timestamp = responseAqi['timestamp'];
-        var aqiValue = responseAqi['aqi_value'];
-        var aqiCategory = responseAqi['aqi_category'];
-        setAqiValues(timestamp,aqiValue,aqiCategory);
-        setAqiColors(aqiCategory);
-        try {
-            setWeatherDetails(responseAqi);
-        } catch(e) {
-            // console.log('no weather box found');
+    return new Promise((resolve, reject) => {
+        var req = new XMLHttpRequest();
+        req.responseType = 'json';
+        req.open('GET', '/dyn/air.json', true);
+        req.setRequestHeader('cache-control', 'no-cache');
+        req.onload = function() {
+            var responseAqi = req.response;
+            var timestamp = responseAqi['timestamp'];
+            var aqiValue = responseAqi['aqi_value'];
+            var aqiCategory = responseAqi['aqi_category'];
+            setAqiValues(timestamp,aqiValue,aqiCategory);
+            setAqiColors(aqiCategory);
+            try {
+                setWeatherDetails(responseAqi);
+            } catch(e) {
+                // console.log('no weather box found');
+            };
+            try {
+                setDesc(responseAqi);
+            } catch(e) {
+                // console.log('no desc box found');
+            };
         };
-        try {
-            setDesc(responseAqi);
-        } catch(e) {
-            // console.log('no desc box found');
-        };
-    };
-    req.send();
+        req.send();
+        resolve(true);
+    });
 }
 
 function setAqiValues(timestamp,aqiValue,aqiCategory) {
