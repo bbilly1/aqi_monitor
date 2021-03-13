@@ -16,6 +16,7 @@
 body {
     margin: 0;
     padding: 0;
+    overflow: hidden;
 }
 
 h1 {
@@ -37,6 +38,27 @@ p, li {
     font-size: 1.1em;
 }
 
+.preload {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 100vh;
+    background: #e6e6e6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+}
+
+.preload img {
+    width: 100px;
+}
+
+.preload-finish {
+    opacity: 0;
+    pointer-events: none;
+}
+
 a {
     color: inherit;
     font-family: Rubik-Regular;
@@ -51,7 +73,7 @@ a {
 
 .content-date {
     display: inline-block;
-    width: 90px;
+    min-width: 90px;
 }
 
 .colorbox {
@@ -59,8 +81,6 @@ a {
     min-height: 40px;
     margin: 0;
     padding: 0;
-    position: sticky;
-    position: -webkit-sticky;
     top: 0;
     z-index: 1;
 }
@@ -111,7 +131,7 @@ a {
 }
 
 .divider hr {
-    border: 2px solid;
+    border: 1px solid;
 }
 
 .cloud {

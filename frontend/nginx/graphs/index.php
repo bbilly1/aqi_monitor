@@ -6,11 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/lightbox.css">
+    <title>Graphs</title>
     <script src="/js/aqi.js"></script>
     <script src="/js/lightbox.js"></script>
-    <title>Graphs</title>
 </head>
 <body>
+    <div class="preload">
+        <img src="/img/cloud_colors.gif" alt="cloud_animation">
+    </div>
     <div class="block_wrap light_background">
         <?php include($_SERVER['DOCUMENT_ROOT'] . '/incl/topnav.php'); ?>
     </div>
@@ -92,7 +95,7 @@
             <div>
                 <h3>Hourly AQI average</h3>
                 <p>The AQI value can change a lot during the day. This can depend on the wind, cooking on fire or just another additional source of pollution nearby.</p>
-                <p>In this chart you can see the average AQI for each hour. This data is based on the last three days. This data can help to visualize which hours in the past three hours have been better or worse on average.</p>
+                <p>In this chart you can see the average AQI for each hour. This data is based on the last three days. This data can help to visualize which hours in the past three days have been better or worse on average.</p>
             </div>
         </div>
         <div class="content divider">

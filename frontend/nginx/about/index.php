@@ -5,10 +5,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/style.css">
-    <script src="/js/aqi.js"></script>
     <title>About</title>
+    <script src="/js/aqi.js"></script>
 </head>
 <body>
+    <div class="preload">
+        <img src="/img/cloud_colors.gif" alt="cloud_animation">
+    </div>
     <div class="block_wrap light_background">
         <?php include($_SERVER['DOCUMENT_ROOT'] . '/incl/topnav.php'); ?>
     </div>

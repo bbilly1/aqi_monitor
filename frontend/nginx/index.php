@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/lightbox.css">
-    <script src="/js/lightbox.js"></script>
-    <script src="/js/aqi.js"></script>
     <title>AQI</title>
+    <script src="/js/aqi.js"></script>
+    <script src="/js/lightbox.js"></script>
     <meta property="og:title" content="Live Air Quality in Luang Prabang Laos PDR" />
     <meta property="og:url" content="https://www.lpb-air.com/" />
     <meta property="og:image" content="https://www.lpb-air.com/img/social_preview.jpg" />
@@ -16,6 +16,9 @@
     <meta property="og:description" content="Real-time and on site air quality measurment and changes over time." />
 </head>
 <body>
+    <div class="preload">
+        <img src="/img/cloud_colors.gif" alt="cloud_animation">
+    </div>
     <div class="block_wrap light_background">
         <?php include($_SERVER['DOCUMENT_ROOT'] . '/incl/topnav.php'); ?>
         <div class="top_content content">
