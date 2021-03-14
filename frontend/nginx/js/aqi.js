@@ -2,6 +2,7 @@
 const startInterval = async () => {
     await refreshAqiValues();
     setInterval("refreshAqiValues();",60000);
+    setInterval("refreshImg();",300000);
     await new Promise(resolve => setTimeout(resolve, 1000));
     rmPreload();
 }
@@ -67,6 +68,15 @@ function rmPreload() {
     topBar.style.position = '-webkit-sticky';
 }
 
+// reload current.png from remote
+function refreshImg() {
+    var timestamp = new Date().getTime();
+    var newLink = "/dyn/current.png?t=" + timestamp;
+    var lastThreeImg = document.getElementById('last3-img');
+    var lastThreeA = document.getElementById('last3-a');
+    lastThreeImg.src = newLink;
+    lastThreeA.href = newLink;
+}
 
 // wrap for interval
 function refreshAqiValues() {

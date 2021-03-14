@@ -111,8 +111,8 @@
         <div class="graph2 content">
             <div class="graph_item">
                 <h3 id="last3">Last three hours</h3>
-                <a href="/dyn/current.png" data-lightbox="graph">
-                    <img src="/dyn/current.png" alt="current">
+                <a href="/dyn/current.png" data-lightbox="graph" id="last3-a">
+                    <img src="/dyn/current.png" alt="current" id="last3-img">
                 </a>
             </div>
             <div class="graph_item">
