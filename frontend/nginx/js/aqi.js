@@ -74,8 +74,12 @@ function refreshImg() {
     var newLink = "/dyn/current.png?t=" + timestamp;
     var lastThreeImg = document.getElementById('last3-img');
     var lastThreeA = document.getElementById('last3-a');
-    lastThreeImg.src = newLink;
-    lastThreeA.href = newLink;
+    try {
+        lastThreeImg.src = newLink;
+        lastThreeA.href = newLink;
+    } catch(e) {
+        // console.log('no link to change');
+    }
 }
 
 // wrap for interval
