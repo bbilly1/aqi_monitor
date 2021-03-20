@@ -133,6 +133,7 @@ def build_plt(rows, sample_rate, time_format):
     indexed = df.set_index('timestamp')
     indexed.sort_values(by=['timestamp'], inplace=True)
     mean = indexed.resample(sample_rate).mean()
+    mean.interpolate(method='linear', limit=1, inplace=True, limit_area='inside')
     mean.reset_index(level=0, inplace=True)
     mean['timestamp'] = mean['timestamp'].dt.strftime(time_format)
     mean['aqi'] = mean['aqi'].round()
