@@ -11,6 +11,7 @@ from app import aqi_parser
 from app import weather
 from app import graph
 from app import graph_pm
+from app import table_export
 from app.db_connect import db_insert
 
 
@@ -43,6 +44,7 @@ graph_pm.rebuild_pm_bar(config)
 graph.rebuild_3days(config)
 graph.rebuild_7days(config)
 graph_pm.rebuild_hour_bar(config)
+table_export.rebuild_table(config)
 
 # build username / pw dict for basic auth
 USER_DATA = {}
@@ -68,6 +70,9 @@ scheduler.add_job(
 )
 scheduler.add_job(
     graph_pm.rebuild_hour_bar, args=[config], trigger="cron", day='*', hour='1', minute='4', name='hour_bar'
+)
+scheduler.add_job(
+    table_export.rebuild_table, args=[config], trigger="cron", day='*', hour='1', minute='6', name='rebuild_table'
 )
 scheduler.start()
 
