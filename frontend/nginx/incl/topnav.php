@@ -1,4 +1,4 @@
-<div class="colorbox" id="colorbox">
+<div class="col_bg colorbox" id="colorbox">
     <?php include($_SERVER['DOCUMENT_ROOT'] . '/incl/update.html'); ?>
 </div>
 <div class="top_content content">

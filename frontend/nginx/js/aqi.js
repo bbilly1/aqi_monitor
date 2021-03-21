@@ -4,6 +4,7 @@ const startInterval = async () => {
     setInterval("refreshAqiValues();",60000);
     setInterval("refreshImg();",300000);
     await new Promise(resolve => setTimeout(resolve, 1000));
+    tableContent();
     rmPreload();
 }
 window.addEventListener('load', startInterval);
@@ -136,7 +137,7 @@ function setAqiColors(aqiCategory) {
     var colSecond = colorConfig[aqiCategory][1];
     var colFilter = colorConfig[aqiCategory][2];
     // apply topbox col
-    var colorboxList = document.getElementsByClassName('colorbox');
+    var colorboxList = document.getElementsByClassName('col_bg');
     for (var i = 0; i < colorboxList.length; i++) {
         colorboxList[i].style.backgroundColor = colMain;
     }
@@ -222,4 +223,69 @@ function setDesc(responseAqi) {
     var activeCat = document.getElementsByClassName('desc_item')[indexMatch];
     // activate
     activeCat.classList.add("active");
+}
+
+
+function tableContent() {
+    // get tbody
+    var tableBody = document.getElementById("tableBody");
+    if (!tableBody) {
+        return;
+    }
+    // setup req
+    var req = new XMLHttpRequest();
+    req.responseType = 'json';
+    req.open('GET', '/dyn/year-table.json', true);
+    req.onload = function() {
+        // parse json
+        var json = req.response['data']
+        // loop through row
+        json.forEach((row) => {
+            var tr = document.createElement('tr');
+            // loop through each cell
+            row.forEach((cell) => {
+                var td = document.createElement('td');
+                var tdType = typeof cell;
+                if (tdType == 'number') {
+                    var background = parseCatId(cell);
+                    td.style.backgroundColor = background;
+                }
+                if (cell == 'down') {
+                    td.textContent = '\u25BC';
+                    td.style.backgroundColor = '#00cc00';
+                } else if (cell == 'up') {
+                    td.textContent = '\u25B2';
+                    td.style.backgroundColor = '#cc0000';
+                } else if (cell == 'same') {
+                    td.textContent = '\u301C';
+                    td.style.backgroundColor = '#bdbdbd';
+                } else {
+                    td.textContent = cell;
+                }
+                tr.appendChild(td);
+            })
+            tableBody.appendChild(tr);
+        })
+    };
+    req.send();
+}
+
+function parseCatId(cell) {
+    // helper function to return correct
+    // background color based on aqi value
+    aqiCatId = Math.floor(cell / 50);
+    if (aqiCatId == 0) {
+        var background = colorConfig['Good'][0];
+    } else if (aqiCatId == 1) {
+        var background = colorConfig['Moderate'][0];
+    } else if (aqiCatId == 2) {
+        var background = colorConfig['Unhealthy for Sensitive Groups'][0];
+    } else if (aqiCatId == 3) {
+        var background = colorConfig['Unhealthy'][0];
+    } else if (aqiCatId >= 4 && aqiCatId <= 5) {
+        var background = colorConfig['Very Unhealthy'][0];
+    } else {
+        var background = colorConfig['Hazardous'][0];
+    }
+    return background;
 }

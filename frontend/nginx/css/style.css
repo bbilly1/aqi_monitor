@@ -28,12 +28,12 @@ h2 {
     font-family: Rubik-Bold;
 }
 
-h3 {
+h3, th {
     font-family: Rubik-Light;
     font-size: 1.3em;
 }
 
-p, li {
+p, li, td {
     font-family: Rubik-Regular;
     font-size: 1.1em;
 }
@@ -282,6 +282,31 @@ a {
     margin: 15px;
     box-shadow: darkgray 5px 5px;
     font-weight: bold;   
+}
+
+/* table */
+.year-table table{
+    width: 100%;
+    max-width: 500px;
+    table-layout: fixed;
+    margin: auto;
+}
+
+.year-table thead th {
+    padding: 5px 0;
+    background-color: #eeeeee;
+}
+
+.year-table tbody td:nth-child(1) {
+    padding: 3px 0 3px 10px;
+    background-color: #eeeeee;
+}
+
+.year-table td:nth-child(2),
+.year-table td:nth-child(3),
+.year-table td:nth-child(4) {
+    text-align: center;
+    color: #fff;
 }
 
 /* about */

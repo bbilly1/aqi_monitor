@@ -122,6 +122,24 @@
                 </a>
             </div>
         </div>
+        <div class="content">
+            <h3>Compared to last year</h3>
+            <p>This year's daily average AQI values from last 10 days compared to corresponding values from last year.</p>
+            <div class="year-table" id="compare">
+                <table>
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>this year</th>
+                            <th>last year</th>
+                            <th>change</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
     <?php include($_SERVER['DOCUMENT_ROOT'] . '/incl/footer.html'); ?>
 </body>
