@@ -9,6 +9,31 @@ import pandas as pd
 from app.db_connect import db_connect, db_close
 
 
+def color_colums(y):
+    """ helper function to color bar columns """
+    col = []
+    for val in y:
+        if val <= 50:
+            # good
+            col.append('#85a762')
+        elif val > 50 and val <= 100:
+            # moderate
+            col.append('#d4b93c')
+        elif val > 100 and val <= 150:
+            # ufsg
+            col.append('#e96843')
+        elif val > 150 and val <= 200:
+            # unhealthy
+            col.append('#d03f3b')
+        elif val > 200 and val <= 300:
+            # vunhealthy
+            col.append('#be4173')
+        else:
+            # hazardous
+            col.append('#714261')
+    return col
+
+
 def get_pm_data(config):
     """ gets last 10 days worth of data"""
     now = datetime.now()
@@ -141,27 +166,8 @@ def build_hour_plot(x, y):
     x_range = np.arange(0, 24, step=3)
     x_hours = [str(i).zfill(2) + ":00" for i in x_range]
     y_max = np.ceil(max(y)/50) * 50 + 50
-    # color the columns
-    col = []
-    for val in y:
-        if val <= 50:
-            # good
-            col.append('#85a762')
-        elif val > 50 and val <= 100:
-            # moderate
-            col.append('#d4b93c')
-        elif val > 100 and val <= 150:
-            # ufsg
-            col.append('#e96843')
-        elif val > 150 and val <= 200:
-            # unhealthy
-            col.append('#d03f3b')
-        elif val > 200 and val <= 300:
-            # vunhealthy
-            col.append('#be4173')
-        else:
-            # hazardous
-            col.append('#714261')
+    # color columns
+    col = color_colums(y)
     # create plot
     plt.style.use('seaborn')
     plt.bar(x, y, color=col, width=0.5)
