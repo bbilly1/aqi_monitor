@@ -197,6 +197,7 @@ def write_plt(x, y, plt_title, x_ticks, file_name, y_max=''):
     plt.tight_layout()
     plt.savefig(f'dyn/{file_name}.png', dpi = 300)
     plt.figure()
+    plt.close('all')
 
 
 def write_last7_plt(x, y_1, y_2, x_ticks, plt_title):
