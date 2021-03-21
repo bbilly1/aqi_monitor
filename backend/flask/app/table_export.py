@@ -3,8 +3,10 @@
 from datetime import datetime
 import numpy as np
 import pandas as pd
+from matplotlib import pyplot as plt
 
 from app.db_connect import db_connect, db_close
+from app.graph_pm import color_colums
 
 
 def get_rows(config):
@@ -86,7 +88,7 @@ def write_df(mean):
         avg_change = 'same'
     
     # build avg df
-    avg_row = {'timestamp': 'avg', 'now_aqi': now_avg, 'year_aqi': year_avg, 'change': avg_change}
+    avg_row = {'timestamp': '10 days avg', 'now_aqi': now_avg, 'year_aqi': year_avg, 'change': avg_change}
     new_row = pd.DataFrame(avg_row, index = [0]).round()
     mean = pd.concat([new_row, mean]).reset_index(drop = True)
     # convert to int
@@ -98,10 +100,39 @@ def write_df(mean):
         f.write(mean_json)
 
 
+def write_graph(mean):
+    """ recreate barchart with yearly comparison """
+    # build axis
+    mean.sort_index(inplace=True)
+    x = mean['timestamp'].to_list()
+    y_1 = mean['now_aqi'].to_list()
+    y_2 = mean['year_aqi'].to_list()
+    # build color lists
+    col_y_1 = color_colums(y_1)
+    col_y_2 = color_colums(y_2)
+    # set ticks
+    y_max = int(np.ceil(max(y_1 + y_2)/50) * 50 + 50)
+    x_indexes = np.arange(len(x))
+    # build plot
+    width = 0.25
+    plt_title = 'Daily avg AQI values compared to last year'
+    plt.style.use('seaborn')
+    # write bars
+    plt.bar(x_indexes - (width / 2) - 0.02, y_1, color=col_y_1, width=width)
+    plt.bar(x_indexes + (width / 2) + 0.02, y_2, color=col_y_2, width=width)
+    plt.title(plt_title, fontsize=20)
+    plt.yticks(np.arange(0, y_max, step=50))
+    plt.xticks(ticks=x_indexes, labels=x)
+    plt.tight_layout()
+    plt.savefig('dyn/year-graph.png', dpi=300)
+    plt.figure()
+
+
 def rebuild_table(config):
     """ main function to recreate year comparison table """
     now_rows, year_rows = get_rows(config)
     mean = initial_df(now_rows, year_rows)
     write_df(mean)
+    write_graph(mean)
     # done
-    print('recreated year comparison json file')
+    print('recreated year comparison graph and json file')
