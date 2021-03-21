@@ -87,15 +87,15 @@ def build_pm_plot(x, y, y_max, thresh, title):
     col = []
     for val in y:
         if val < thresh:
-            col.append('#00cc00')
+            col.append('#6ecd65')
         else:
-            col.append('#cc0000')
+            col.append('#ff4d4d')
     # title
     plt_title = f'Daily avg PM {title} exposure'
     # plot
     plt.style.use('seaborn')
     plt.bar(x_dates, y, color=col, width=0.5)
-    plt.axhline(y=thresh, color='#00cc00', linestyle=':')
+    plt.axhline(y=thresh, color='#6ecd65', linestyle=':')
     plt.xticks(ticks=x_range, labels=x_dates)
     plt.yticks(np.arange(0, y_max, step=25))
     plt.title(plt_title, fontsize=20)

@@ -88,7 +88,7 @@ def write_df(mean):
         avg_change = 'same'
     
     # build avg df
-    avg_row = {'timestamp': '10 days avg', 'now_aqi': now_avg, 'year_aqi': year_avg, 'change': avg_change}
+    avg_row = {'timestamp': 'avg 10 days', 'now_aqi': now_avg, 'year_aqi': year_avg, 'change': avg_change}
     new_row = pd.DataFrame(avg_row, index = [0]).round()
     mean = pd.concat([new_row, mean]).reset_index(drop = True)
     # convert to int

@@ -252,10 +252,10 @@ function tableContent() {
                 }
                 if (cell == 'down') {
                     td.textContent = '\u25BC';
-                    td.style.backgroundColor = '#00cc00';
+                    td.style.backgroundColor = '#6ecd65';
                 } else if (cell == 'up') {
                     td.textContent = '\u25B2';
-                    td.style.backgroundColor = '#cc0000';
+                    td.style.backgroundColor = '#ff4d4d';
                 } else if (cell == 'same') {
                     td.textContent = '\u301C';
                     td.style.backgroundColor = '#bdbdbd';
