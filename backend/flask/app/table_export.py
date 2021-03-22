@@ -10,15 +10,15 @@ from app.graph_pm import color_colums
 
 
 def get_rows(config):
-    """ get rows from last 10 days 
-    and last 10 days one year ago """
+    """ get rows from last 7 days 
+    and last 7 days one year ago """
     now = datetime.now()
     # last 10
     now_until = int(now.date().strftime('%s'))
-    now_from = now_until - 10 * 24 * 60 * 60
+    now_from = now_until - 7 * 24 * 60 * 60
     # last 10 one year ago
     year_until = now_until - 365 * 24 * 60 * 60
-    year_from = now_until - 375 * 24 * 60 * 60
+    year_from = now_until - 372 * 24 * 60 * 60
     # make the call
     conn, cur = db_connect(config)
     cur.execute(
@@ -88,7 +88,7 @@ def write_df(mean):
         avg_change = 'same'
     
     # build avg df
-    avg_row = {'timestamp': 'avg 10 days', 'now_aqi': now_avg, 'year_aqi': year_avg, 'change': avg_change}
+    avg_row = {'timestamp': 'avg 7 days', 'now_aqi': now_avg, 'year_aqi': year_avg, 'change': avg_change}
     new_row = pd.DataFrame(avg_row, index = [0]).round()
     mean = pd.concat([new_row, mean]).reset_index(drop = True)
     # convert to int
@@ -116,11 +116,13 @@ def write_graph(mean):
     # build plot
     width = 0.25
     plt_title = 'Daily avg AQI values compared to last year'
+    plt_suptitle = 'left: this year, right: last year'
     plt.style.use('seaborn')
     # write bars
     plt.bar(x_indexes - (width / 2) - 0.02, y_1, color=col_y_1, width=width)
     plt.bar(x_indexes + (width / 2) + 0.02, y_2, color=col_y_2, width=width)
-    plt.title(plt_title, fontsize=20)
+    plt.title(plt_suptitle,fontsize=15)
+    plt.suptitle(plt_title,fontsize=20, y=0.96)
     plt.yticks(np.arange(0, y_max, step=50))
     plt.xticks(ticks=x_indexes, labels=x)
     plt.tight_layout()
