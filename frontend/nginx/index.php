@@ -124,7 +124,9 @@
         </div>
         <div class="content">
             <h3>Compared to last year</h3>
-            <p>This year's daily average AQI values from last 10 days compared to corresponding values from last year.</p>
+            <p>This year's daily average AQI values from last 7 days compared to corresponding values from last year.</p>
+        </div>
+        <div class="graph2 content">
             <div class="year-table" id="compare">
                 <table>
                     <thead>
@@ -138,6 +140,11 @@
                     <tbody id="tableBody">
                     </tbody>
                 </table>
+            </div>
+            <div class="graph_item">
+                <a href="/dyn/year-graph.png" data-lightbox="graph">
+                    <img src="/dyn/year-graph.png" alt="last year comparison">
+                </a>
             </div>
         </div>
     </div>

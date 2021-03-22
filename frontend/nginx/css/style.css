@@ -28,12 +28,12 @@ h2 {
     font-family: Rubik-Bold;
 }
 
-h3, th {
+h3 {
     font-family: Rubik-Light;
     font-size: 1.3em;
 }
 
-p, li, td {
+p, li, td, th {
     font-family: Rubik-Regular;
     font-size: 1.1em;
 }
@@ -285,6 +285,11 @@ a {
 }
 
 /* table */
+.year-table {
+    display: flex;
+    justify-content: center;
+}
+
 .year-table table{
     width: 100%;
     max-width: 500px;
