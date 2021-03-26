@@ -106,15 +106,15 @@ def rebuild_7days(config):
     rows = cur.fetchall()
     db_close(conn, cur)
     # title
-    date_from = datetime.fromtimestamp(rows[-1][0]).strftime('%Y-%m-%d')
-    date_until = datetime.fromtimestamp(rows[0][0]).strftime('%Y-%m-%d')
+    date_from = datetime.fromtimestamp(rows[-1][0]).strftime('%d %b')
+    date_until = datetime.fromtimestamp(rows[0][0]).strftime('%d %b')
     plt_title = f'AQI values from: {date_from} until {date_until}'
     # build axis of plot
     x, y_1, y_2 = build_last7_plt(rows)
     # make ticks
     x_range = np.arange(0, 84, step=12)
     x_date_time = pd.to_datetime(x).dt.date.unique()
-    x_dates = np.asarray([i.strftime('%Y-%m-%d') for i in x_date_time])
+    x_dates = np.asarray([i.strftime('%d %b') for i in x_date_time])
     x_ticks = x_range, x_dates
     # write the plot
     write_last7_plt(x, y_1, y_2, x_ticks, plt_title)
