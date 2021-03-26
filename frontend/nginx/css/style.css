@@ -163,6 +163,10 @@ a {
     margin: 0;
 }
 
+.aqi_box p {
+    margin: 0;
+}
+
 /* weather styling */
 .block_wrap {
     margin-bottom: 40px;

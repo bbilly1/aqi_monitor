@@ -26,6 +26,7 @@
                 <img src="/img/cloud.png" alt="cloud" class="col_filter">
                 <div class="aqi_box">
                     <h1 id="aqiValue"></h1>
+                    <p id="aqi-label">US AQI</p>
                     <h2 id="aqiCategory"></h2>
                 </div>
             </div>
