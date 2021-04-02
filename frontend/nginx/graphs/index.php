@@ -20,6 +20,7 @@
     <div class="block_wrap">
         <div class="content">
             <h1>Graphs</h1>
+            <p>All the graphs and table on this page will get recreated every night with the newest values.</p>
         </div>
         <div class="content">
             <h2 id="last3">Last three days</h2>
@@ -101,10 +102,30 @@
         <div class="content divider">
             <hr class="col_border">
         </div>
-    </div>
-    <div class="block_wrap">
-        <div class="tagline_content content">
-            <h2>Some more graphs are coming soon here!</h2>
+        <div class="content">
+            <h2>Compared to last year</h2>
+            <p>This year's daily average AQI values from last 7 days compared to corresponding values from last year.</p>
+        </div>
+        <div class="graph2 content">
+            <div class="year-table" id="compare">
+                <table>
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>this year</th>
+                            <th>last year</th>
+                            <th>change</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                    </tbody>
+                </table>
+            </div>
+            <div class="graph_item">
+                <a href="/dyn/year-graph.png" data-lightbox="graph">
+                    <img src="/dyn/year-graph.png" alt="last year comparison">
+                </a>
+            </div>
         </div>
     </div>
     <?php include($_SERVER['DOCUMENT_ROOT'] . '/incl/footer.html'); ?>
