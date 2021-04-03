@@ -5,6 +5,7 @@ const startInterval = async () => {
     setInterval("refreshImg();",300000);
     await new Promise(resolve => setTimeout(resolve, 1000));
     tableContent();
+    monthlyTable();
     rmPreload();
 }
 window.addEventListener('load', startInterval);
@@ -262,6 +263,62 @@ function tableContent() {
                 } else {
                     td.textContent = cell;
                 }
+                tr.appendChild(td);
+            })
+            tableBody.appendChild(tr);
+        })
+    };
+    req.send();
+}
+
+function monthlyTable() {
+    // fill data into monthly tables
+    var allTables = document.getElementsByClassName('monthly-table');
+    if (allTables) {
+        for (var i = 0; i < allTables.length; i++) {
+            var data = allTables[i].getAttribute('data');
+            tableBody = document.getElementById(data);
+            // get rows and put in table
+            fillMonthlyTable(tableBody, data);
+        };
+    };
+}
+
+function fillMonthlyTable(tableBody, data) {
+    // setup req
+    var req = new XMLHttpRequest();
+    req.responseType = 'json';
+    req.open('GET', '/dyn/monthly/2021-03.json', true);
+    req.onload = function() {
+        // parse json
+        var json = req.response['data']
+        json.forEach((row) => {
+            var tr = document.createElement('tr');
+            // loop through each cell
+            row.forEach((cell) => {
+                var td = document.createElement('td');
+                var tdType = typeof cell;
+                if (tdType == 'number') {
+                    var background = parseCatId(cell);
+                    td.style.backgroundColor = background;
+                }
+                if (cell == 'down') {
+                    td.textContent = '\u25BC';
+                    td.style.backgroundColor = '#6ecd65';
+                } else if (cell == 'up') {
+                    td.textContent = '\u25B2';
+                    td.style.backgroundColor = '#ff4d4d';
+                } else if (cell == 'same') {
+                    td.textContent = '\u301C';
+                    td.style.backgroundColor = '#bdbdbd';
+                } else {
+                    td.textContent = cell;
+                    try {
+                        td.style.backgroundColor = colorConfig[cell][0];
+                    } catch(e) {
+                        //
+                    };
+                };
                 tr.appendChild(td);
             })
             tableBody.appendChild(tr);

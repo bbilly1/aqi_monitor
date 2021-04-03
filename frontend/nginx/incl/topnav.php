@@ -12,6 +12,7 @@
             <a href="/"><li class="col_border">Home</li></a>
             <a href="/about"><li class="col_border">About</li></a>
             <a href="/graphs"><li class="col_border">Graphs</li></a>
+            <a href="/monthly"><li class="col_border">Monthly</li></a>
         </ul>
     </div>
 </div>
