@@ -16,16 +16,16 @@ def get_epoch():
     """ returns epoch for last month and last month last year """
     # run within first 7 days of month
     now = datetime.now()
-    time = now - timedelta(days=7)
     # last month
-    month_start = datetime(time.year, time.month, 1)
-    last_month = now.month - 1
-    d_last_month = calendar.monthrange(now.year,last_month)[1]
-    month_end = datetime(time.year, time.month, d_last_month, 23, 59)
+    last_day = now.replace(day=1) - timedelta(days=1)
+    month_start = last_day.replace(day=1,hour=0,minute=0,second=0)
+    month_end = last_day.replace(hour=23,minute=59,second=59)
     # last year
-    month_start_year = datetime(time.year - 1, time.month, 1)
-    d_last_year = calendar.monthrange(now.year - 1,last_month)[1]
-    month_end_year = datetime(time.year - 1, time.month, d_last_year, 23, 59)
+    last_year = last_day.year - 1
+    month_start_year = month_start.replace(year=last_year)
+    m_start_year_next = month_start_year + timedelta(days=31)
+    m_start_year_first = m_start_year_next.replace(day=1)
+    month_end_year = (m_start_year_first - timedelta(days=1)).replace(hour=23,minute=59,second=59)
     # build tpl and return
     last_month_tpl = (month_start.strftime('%s'), month_end.strftime('%s'))
     last_year_tpl = (month_start_year.strftime('%s'), month_end_year.strftime('%s'))
