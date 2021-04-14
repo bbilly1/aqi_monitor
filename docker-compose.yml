@@ -1,4 +1,4 @@
-version: "3"
+version: "3.2"
 
 services:
   # ssl
@@ -72,6 +72,9 @@ services:
     restart: always
     volumes:
       - ./frontend/nginx:/air
+      - type: bind
+        source: ./volume/flask/dyn
+        target: /air/dyn
   # lpb-air
   air:
     image: nginx
@@ -80,8 +83,10 @@ services:
     expose:
       - "80"
     volumes:
+      - type: bind
+        source: ./volume/flask/dyn
+        target: /air/dyn
       - ./frontend/nginx:/air:rw
-      - ./volume/flask/dyn:/dyn:ro
       - ./frontend/nginx.conf:/etc/nginx/conf.d/default.conf
     environment:
       - VIRTUAL_HOST=www.lpb-air.com,lpb-air.com
