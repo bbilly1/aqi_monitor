@@ -117,7 +117,21 @@
                             <th>change</th>
                         </tr>
                     </thead>
-                    <tbody id="tableBody">
+                    <tbody class="aqi-table">
+                    <!-- start trs -->
+                    <?php
+                        $json_file = $_SERVER['DOCUMENT_ROOT'] . '/dyn/year-table.json';
+                        $json = json_decode(file_get_contents($json_file), true);
+                        $rows = $json['data'];
+                        foreach($rows as $row) {
+                            echo '<tr>';
+                            foreach($row as $cell) {
+                                echo '<td>' . $cell . '</td>';
+                            }
+                            echo '</tr>';
+                        }
+                    ?>
+                    <!-- end trs -->
                     </tbody>
                 </table>
             </div>

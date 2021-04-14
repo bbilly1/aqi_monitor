@@ -4,8 +4,7 @@ const startInterval = async () => {
     setInterval("refreshAqiValues();",60000);
     setInterval("refreshImg();",300000);
     await new Promise(resolve => setTimeout(resolve, 1000));
-    tableContent();
-    monthlyTable();
+    colorTables();
     rmPreload();
 }
 window.addEventListener('load', startInterval);
@@ -227,110 +226,44 @@ function setDesc(responseAqi) {
 }
 
 
-function tableContent() {
-    // get tbody
-    var tableBody = document.getElementById("tableBody");
-    if (!tableBody) {
-        return;
+function colorTables() {
+    // color table cells based on aqi value
+    var tableBodies = document.getElementsByClassName('aqi-table');
+    if (tableBodies) {
+        var allCells = document.getElementsByTagName('td');
+        for (var i = 0; i < allCells.length; i++) {
+            var cell = allCells[i];
+            var cellContent = cell.textContent;
+            if (Number(cellContent)) {
+                var background = parseCatId(cellContent);
+                cell.style.backgroundColor = background;
+            } else if (cellContent == 'down') {
+                cell.textContent = '\u25BC';
+                cell.style.backgroundColor = '#6ecd65';
+            } else if (cellContent == 'up') {
+                cell.textContent = '\u25B2';
+                cell.style.backgroundColor = '#ff4d4d';
+            } else if (cellContent == 'same') {
+                cell.textContent = '\u301C';
+                cell.style.backgroundColor = '#bdbdbd';
+            } else {
+                try {
+                    var backgroundColor = colorConfig[cellContent][0];
+                    cell.style.backgroundColor = backgroundColor;
+                } catch(e) {
+                    //
+                }
+            }
+        }
+        
     }
-    // setup req
-    var req = new XMLHttpRequest();
-    req.responseType = 'json';
-    req.open('GET', '/dyn/year-table.json', true);
-    req.onload = function() {
-        // parse json
-        var json = req.response['data']
-        // loop through row
-        json.forEach((row) => {
-            var tr = document.createElement('tr');
-            // loop through each cell
-            row.forEach((cell) => {
-                var td = document.createElement('td');
-                var tdType = typeof cell;
-                if (tdType == 'number') {
-                    var background = parseCatId(cell);
-                    td.style.backgroundColor = background;
-                }
-                if (cell == 'down') {
-                    td.textContent = '\u25BC';
-                    td.style.backgroundColor = '#6ecd65';
-                } else if (cell == 'up') {
-                    td.textContent = '\u25B2';
-                    td.style.backgroundColor = '#ff4d4d';
-                } else if (cell == 'same') {
-                    td.textContent = '\u301C';
-                    td.style.backgroundColor = '#bdbdbd';
-                } else {
-                    td.textContent = cell;
-                }
-                tr.appendChild(td);
-            })
-            tableBody.appendChild(tr);
-        })
-    };
-    req.send();
 }
 
-function monthlyTable() {
-    // fill data into monthly tables
-    var allTables = document.getElementsByClassName('monthly-table');
-    if (allTables) {
-        for (var i = 0; i < allTables.length; i++) {
-            var data = allTables[i].getAttribute('data');
-            tableBody = document.getElementById(data);
-            // get rows and put in table
-            fillMonthlyTable(tableBody, data);
-        };
-    };
-}
 
-function fillMonthlyTable(tableBody, data) {
-    // setup req
-    var req = new XMLHttpRequest();
-    req.responseType = 'json';
-    req.open('GET', '/dyn/monthly/2021-03.json', true);
-    req.onload = function() {
-        // parse json
-        var json = req.response['data']
-        json.forEach((row) => {
-            var tr = document.createElement('tr');
-            // loop through each cell
-            row.forEach((cell) => {
-                var td = document.createElement('td');
-                var tdType = typeof cell;
-                if (tdType == 'number') {
-                    var background = parseCatId(cell);
-                    td.style.backgroundColor = background;
-                }
-                if (cell == 'down') {
-                    td.textContent = '\u25BC';
-                    td.style.backgroundColor = '#6ecd65';
-                } else if (cell == 'up') {
-                    td.textContent = '\u25B2';
-                    td.style.backgroundColor = '#ff4d4d';
-                } else if (cell == 'same') {
-                    td.textContent = '\u301C';
-                    td.style.backgroundColor = '#bdbdbd';
-                } else {
-                    td.textContent = cell;
-                    try {
-                        td.style.backgroundColor = colorConfig[cell][0];
-                    } catch(e) {
-                        //
-                    };
-                };
-                tr.appendChild(td);
-            })
-            tableBody.appendChild(tr);
-        })
-    };
-    req.send();
-}
-
-function parseCatId(cell) {
+function parseCatId(cellContent) {
     // helper function to return correct
     // background color based on aqi value
-    aqiCatId = Math.floor(cell / 50);
+    aqiCatId = Math.floor(cellContent / 50);
     if (aqiCatId == 0) {
         var background = colorConfig['Good'][0];
     } else if (aqiCatId == 1) {
