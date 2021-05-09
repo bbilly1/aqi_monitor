@@ -8,6 +8,9 @@ backup_dir="$HOME/backup"
 # backup
 docker exec postgres pg_dump -U aqi | gzip > "$backup_dir/pg_$time_stamp.gz"
 
+# rotate
+find backup/ -type f -name "pg_*.gz" | sort -r | tail -n +15 | xargs --no-run-if-empty trash
+
 # log
 log_file="$backup_dir/pg_status.log"
 
