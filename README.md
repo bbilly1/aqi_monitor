@@ -1,5 +1,6 @@
 # AQI sensor project
 
+![alt text](https://www.lpb-air.com/img/social_preview.jpg)
 This is a place to show off what went into building my AQI measuring station currently publishing to:
 
 [lpb-air.com](lpb-air.com)
