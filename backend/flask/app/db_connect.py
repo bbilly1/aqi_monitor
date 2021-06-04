@@ -46,21 +46,22 @@ def db_insert(config, json_dict):
     weather_icon = json_dict['weather_icon']
     wind_speed = json_dict['wind_speed']
     wind_direction = json_dict['wind_direction']
+    sensor_id = json_dict['sensor_id']
 
     # connect
     conn, cur = db_connect(config)
     # insert aqi
     cur.execute("INSERT INTO aqi \
-        (epoch_time, time_stamp, uptime, pm25, pm10, aqi_value, aqi_category) \
-        VALUES (%s, %s, %s, %s, %s, %s, %s)",
-        (epoch_time, time_stamp, uptime, pm25, pm10, aqi_value, aqi_category)
+        (epoch_time, sensor_id, time_stamp, uptime, pm25, pm10, aqi_value, aqi_category) \
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",
+        (epoch_time, sensor_id, time_stamp, uptime, pm25, pm10, aqi_value, aqi_category)
     )
     # insert weather
     cur.execute("INSERT INTO weather \
-        (epoch_time, time_stamp, temperature, pressure, humidity, \
+        (epoch_time, sensor_id, time_stamp, temperature, pressure, humidity, \
         wind_speed, wind_direction, weather_name, weather_icon) \
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)", 
-        (epoch_time, time_stamp, temperature, pressure, humidity, 
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", 
+        (epoch_time, sensor_id, time_stamp, temperature, pressure, humidity, 
         wind_speed, wind_direction, weather_name, weather_icon)
     )
 

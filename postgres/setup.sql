@@ -1,6 +1,8 @@
 -- create aqi table
 CREATE TABLE aqi (
-    epoch_time INT NOT NULL PRIMARY KEY,
+    id SERIAL NOT NULL PRIMARY KEY,
+    epoch_time INT NOT NULL,
+    sensor_id SMALLINT NOT NULL,
     time_stamp VARCHAR(20) NOT NULL,
     uptime INT NOT NULL,
     pm25 FLOAT4 NOT NULL,
@@ -12,6 +14,7 @@ CREATE TABLE aqi (
 -- example aqi insert
 INSERT INTO aqi (
     epoch_time,
+    sensor_id,
     time_stamp,
     uptime,
     pm25,
@@ -19,13 +22,15 @@ INSERT INTO aqi (
     aqi_value,
     aqi_category
 ) VALUES (
-    1613648178, '2021-02-18 18:36:18', 206728, 20.4, 22.8, 67.0, 'Moderate'
+    1613648178, 1, '2021-02-18 18:36:18', 206728, 20.4, 22.8, 67.0, 'Moderate'
 );
 
 
 -- create weather table
 CREATE TABLE weather (
-    epoch_time INT NOT NULL PRIMARY KEY,
+    id SERIAL NOT NULL PRIMARY KEY,
+    epoch_time INT NOT NULL,
+    sensor_id SMALLINT NOT NULL,
     time_stamp VARCHAR(20) NOT NULL,
     temperature FLOAT4 NOT NULL,
     pressure FLOAT4 NOT NULL,
@@ -39,6 +44,7 @@ CREATE TABLE weather (
 -- example weather insert
 INSERT INTO weather (
     epoch_time,
+    sensor_id,
     time_stamp,
     temperature,
     pressure,
@@ -48,6 +54,6 @@ INSERT INTO weather (
     weather_name,
     weather_icon
 ) VALUES (
-    1613648178, '2021-02-18 18:36:18', 27.32, 982.41, 
+    1613648178, 1, '2021-02-18 18:36:18', 27.32, 982.41, 
     39.62598, 3.09, 40, 'Clouds', '04n'
 );
