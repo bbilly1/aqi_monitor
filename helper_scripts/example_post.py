@@ -1,31 +1,36 @@
 #!/usr/bin/env python3
-""" 
+"""
 script to post data to the ingest route with simulated data for testing
 
 """
-
-import requests
 import json
-import configparser
+import requests
+
+
+def get_config():
+    """ read config file """
+    config_path = 'flask_aqi/config.json'
+
+    with open(config_path, 'r') as config_file:
+        data = config_file.read()
+
+    config = json.loads(data)
+
+    return config
 
 # get auth
-config_parser = configparser.ConfigParser()
-config_parser.read('../backend/flask/config')
-user_name = config_parser.get('aqi_monitor', "authUsername")
-user_pass = config_parser.get('aqi_monitor', "authPassword")
+
+CONFIG = get_config()
+user_name = CONFIG['aqi_monitor']['authUsername']
+user_pass = CONFIG['aqi_monitor']['authPassword']
+
 
 # example json data as from the esp8266
-json_data = {
-  "uptime": 1476,
-  "temperature": 28.46,
-  "pressure": 995.0873,
-  "humidity": 10.52051,
-  "pm25": 56.5,
-  "pm10": 64.4
-}
+example_data = '{"uptime":33,"temperature":35.36,"pressure":970.9545,"humidity":41.44336,"pm25":4.5,"pm10":6.2,"sensor_id":1}'
+
 
 # make the call
-response = requests.post("https://data.lpb-air.com/ingest", json=json_data, auth = (user_name, user_pass))
+response = requests.post("http://localhost:5000/data/in", json=example_data, auth = (user_name, user_pass))
 
 # print result
 print(response)
