@@ -134,7 +134,7 @@ void loop() {
       // connect to remote
       WiFiClientSecure client;
       client.setInsecure();
-      char host[] = "data.lpb-air.com";
+      char host[] = "www.lpb-air.com";
 
       // retry on error
       int retry = 0;
@@ -147,7 +147,7 @@ void loop() {
         Serial.println("Connection failed");
       }
       // build request
-      client.print(String("POST ") + "/ingest" + 
+      client.print(String("POST ") + "/data/in" + 
                   " HTTP/1.1\r\n" + 
                   "Host: " + host + "\r\n" + 
                   "Authorization: Basic " + auth + "\r\n" +
