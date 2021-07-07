@@ -11,6 +11,9 @@ CREATE TABLE aqi (
     aqi_category VARCHAR(40) NOT NULL
 );
 
+-- index for epoch_time where queries
+CREATE INDEX aqi_epochtime ON aqi (epoch_time DESC);
+
 -- example aqi insert
 INSERT INTO aqi (
     epoch_time,
@@ -40,6 +43,9 @@ CREATE TABLE weather (
     weather_name VARCHAR(29) NOT NULL,
     weather_icon VARCHAR(3) NOT NULL
 );
+
+-- index for epoch_time where queries
+CREATE INDEX weather_epochtime ON weather (epoch_time DESC);
 
 -- example weather insert
 INSERT INTO weather (
