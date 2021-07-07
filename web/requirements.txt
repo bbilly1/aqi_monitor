@@ -1,6 +1,7 @@
-apscheduler
+APScheduler
+Flask_HTTPAuth
+Flask_Table
 Flask
-Flask-HTTPAuth
 matplotlib
 numpy
 pandas

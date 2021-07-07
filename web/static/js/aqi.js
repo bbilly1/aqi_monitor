@@ -64,9 +64,9 @@ function rmPreload() {
     // scrollbar
     document.querySelector('body').style.overflow = 'unset'
     // sticky
-    const topBar = document.querySelector('.colorbox');
-    topBar.style.position = 'sticky';
-    topBar.style.position = '-webkit-sticky';
+    // const topBar = document.querySelector('.colorbox');
+    // topBar.style.position = 'sticky';
+    // topBar.style.position = '-webkit-sticky';
 }
 
 // reload current.png from remote
@@ -88,7 +88,7 @@ function refreshAqiValues() {
     return new Promise((resolve, reject) => {
         var req = new XMLHttpRequest();
         req.responseType = 'json';
-        req.open('GET', '/dyn/air.json', true);
+        req.open('GET', '/data/out', true);
         req.setRequestHeader('cache-control', 'no-cache');
         req.onload = function() {
             var responseAqi = req.response;
@@ -149,7 +149,7 @@ function setAqiColors(aqiCategory) {
         };
     }
     // apply light background change
-    var lightBg = document.getElementsByClassName('light_background');
+    var lightBg = document.getElementsByClassName('col_lightbg');
     if (lightBg) {
         for (var i = 0; i < lightBg.length; i++) {
             lightBg[i].style.backgroundColor = colSecond;
@@ -170,7 +170,7 @@ function setAqiColors(aqiCategory) {
         };
     }
     // apply hover color
-    var css = '.nav li:hover {background-color: ' + colMain + ';}';
+    var css = '.title-nav li:hover {background-color: ' + colMain + ';}';
     var style = document.createElement('style');
     style.appendChild(document.createTextNode(css));
     document.getElementsByTagName('head')[0].appendChild(style);
@@ -185,7 +185,7 @@ function setWeatherDetails(responseAqi) {
     var humidity = Math.round(responseAqi['humidity']);
     var pressure = Math.round(responseAqi['pressure']);
     // weather icon
-    weatherIconSrc = '/img/icon/' + weatherIcon + '.png';
+    weatherIconSrc = '/static/img/icon/' + weatherIcon + '.png';
     document.getElementById('weather_icon').src = weatherIconSrc;
     // weather name
     document.getElementById('weather_name').innerHTML = weatherName;
@@ -203,7 +203,7 @@ function setDesc(responseAqi) {
     // parse response
     var aqiCategory = responseAqi['aqi_category'];
     var aqiCatClean = aqiCategory.toLowerCase().replaceAll(' ', '');
-    var iconSrc = '/img/icon/category-' + aqiCatClean + ".png";
+    var iconSrc = '/static/img/icon/category-' + aqiCatClean + ".png";
     // parse config
     var aqiRange = colorConfig[aqiCategory][3];
     var aqiDesc = colorConfig[aqiCategory][4];
@@ -220,7 +220,7 @@ function setDesc(responseAqi) {
     // figure out which to activate
     var allCategories = Object.keys(colorConfig);
     var indexMatch = allCategories.indexOf(aqiCategory);
-    var activeCat = document.getElementsByClassName('desc_item')[indexMatch];
+    var activeCat = document.getElementsByClassName('cat-item')[indexMatch];
     // activate
     activeCat.classList.add("active");
 }

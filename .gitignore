@@ -2,7 +2,7 @@
 __pycache__
 
 # protect real config files
-config
+config.json
 config.h
 
 # env files
@@ -12,6 +12,4 @@ postgres.env
 *.ttf
 
 # dynamic files
-**/dyn/*.json
 **/dyn/
-update.html

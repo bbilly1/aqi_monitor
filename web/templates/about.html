@@ -1,0 +1,55 @@
+{% extends "layout.html" %}
+{% block content %}
+    <div class="full-width">
+        <div class="content">
+            <h1>About</h1>
+            <p class="block-text">This page and its contents are still under construction. More content is coming soon.</p>
+            <p class="block-text">The data for this page is collected from an air monitor located just outside of Luang Prabang, Laos. While we do our best, no guarantee is given for the accuracy of this data.</p>
+            <p class="block-text">The data is updated every 3 minutes. Contrary to international websites who measure the air pollution via satellite images and rely on estimates and averages, an on-site air monitor delivers real time values that paint a much more accurate picture of the local situation.</p>
+            <p class="block-text">Roughly, the Air Quality Index (AQI) is the internationally used air quality standard to measure the pollution of the air. It is divided into 6 levels, and according to these levels, certain health advices are given:</p>
+        </div>
+        <div class="content">
+            <hr class="col_border">
+        </div>
+        <div class="content">
+            <table class="category-table">
+                <tr>
+                    <th>AQI Values</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td class="good">0 to 50:</td>
+                    <td>Good: No health concerns, enjoy activities.</td>
+                </tr>
+                <tr>
+                    <td class="moderate">51 - 100:</td>
+                    <td>Moderate: Active children and adults, and people with respiratory disease, such as asthma, should limit prolonged outdoor exertion.</td>
+                </tr>
+                <tr>
+                    <td class="ufsg">101 - 150:</td>
+                    <td>Unhealthy for Sensitive Groups: Active children and adults, and people with respiratory disease, such as asthma, should limit prolonged outdoor exertion.</td>
+                </tr>
+                <tr>
+                    <td class="unhealthy">151 - 200:</td>
+                    <td>Unhealthy: Everyone may begin to experience health effects: Active children and adults, and people with respiratory disease, such as asthma, should avoid prolonged outdoor exertion; everyone else, especially children, should limit prolonged outdoor exertion.</td>
+                </tr>
+                <tr>
+                    <td class="vunhealthy">201 - 300:</td>
+                    <td>Very Unhealthy: Active children and adults, and people with respiratory disease, such as asthma, should avoid all outdoor exertion; everyone else, especially children, should limit outdoor exertion.</td>
+                </tr>
+                <tr>
+                    <td class="hazardous">301 - 500:</td>
+                    <td>Hazardous: Everyone should avoid all outdoor exertion.</td>
+                </tr>
+            </table>
+        </div>
+        <div class="content">
+            <hr class="col_border">
+        </div>
+        <div class="content">
+            <h2>Credits</h2>
+            <p class="block-text">Partial Weather data, namely weather icon, weather description and windspeed are provided from <a href="https://openweathermap.org/ " target="_blank">openweather.org</a> API distributed under the <a href="https://openweathermap.org/full-price" target="_blank">Creative Commons Attribution-ShareAlike 4.0 Generic License</a>.</p>
+            <p class="block-text"><a target="_blank" href="https://github.com/lokesh/lightbox2">Lightbox</a> made by Lokesh Dhakar, released under the <a target="_blank" href="https://raw.githubusercontent.com/lokesh/lightbox2/master/LICENSE">MIT license</a>.</p>
+        </div>
+    </div>
+{% endblock content %}

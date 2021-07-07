@@ -1,0 +1,103 @@
+{% extends "layout.html" %}
+{% block content %}
+    <div class="full-width col_lightbg">
+        <div class="content">
+            <div class="cloud">
+                <img src="{{ url_for('static', filename='img/cloud.png') }}" alt="cloud" class="col_filter">
+                <div class="aqi_box">
+                    <h1 id="aqiValue"></h1>
+                    <p id="aqi-label">US AQI</p>
+                    <h2 id="aqiCategory"></h2>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="full-width">
+        <div class="content weather">
+            <div class="weather_box col_border">
+                <div class="weather_icon">
+                    <img src="{{ url_for('static', filename='img/icon/000.png') }}" alt="weather_icon" class="col_filter" id="weather_icon">
+                </div>
+                <div class="weather_text">
+                    <h3 class="col_font"><span id="temperature"></span><span> °C</span></h3>
+                    <p id="weather_name"></p>
+                </div>
+            </div>
+            <div class="weather_box col_border">
+                <div class="weather_icon">
+                    <img src="{{ url_for('static', filename='img/icon/wind.png') }}" alt="wind_icon" class="col_filter">
+                </div>
+                <div class="weather_text">
+                    <h3 class="col_font">Wind</h3>
+                    <p><span id="wind_speed"></span><span> km/h</span></p>
+                </div>
+            </div>
+            <div class="weather_box col_border">
+                <div class="weather_icon">
+                    <img src="{{ url_for('static', filename='img/icon/humidity.png') }}" alt="humidity_icon" class="col_filter">
+                </div>
+                <div class="weather_text">
+                    <h3 class="col_font">Humidity</h3>
+                    <p><span id="humidity"></span><span> %</span></p>
+                </div>
+            </div>
+            <div class="weather_box col_border">
+                <div class="weather_icon">
+                    <img src="{{ url_for('static', filename='img/icon/pressure.png') }}" alt="pressure_icon" class="col_filter">
+                </div>
+                <div class="weather_text">
+                    <h3 class="col_font">Pressure</h3>
+                    <p><span id="pressure"></span><span> mbar</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="full-width col_lightbg">
+        <div class="content category">
+            <div class="cat-bar">
+                <div class="cat-item good">
+                    <p>Good</p>
+                </div>
+                <div class="cat-item moderate">
+                    <p>Moderate</p>
+                </div>
+                <div class="cat-item ufsg">
+                    <p>Unhealthy for Sensitive Groups</p>
+                </div>
+                <div class="cat-item unhealthy">
+                    <p>Unhealthy</p>
+                </div>
+                <div class="cat-item vunhealthy">
+                    <p>Very Unhealthy</p>
+                </div>
+                <div class="cat-item hazardous">
+                    <p>Hazardous</p>
+                </div>
+            </div>
+            <div class="cat-icon">
+                <img src="static/img/icon/category-plain.png" alt="category_icon" id="categoryIcon">
+            </div>
+            <div class="cat-desc">
+                <h2 class="col_font" id="aqiName"></h2>
+                <h3 id="aqiRange"></h3>
+                <p id="aqiDesc"></p>
+            </div>
+        </div>
+    </div>
+    <div class="full-width">
+        <div class="content graph">
+            <div class="graph-item">
+                <h3>Last three hours</h3>
+                <a href="/static/dyn/current.png" data-lightbox="graph">
+                    <img src="/static/dyn/current.png" alt="current graph">
+                </a>
+            </div>
+            <div class="graph-item">
+                <h3>Last 7 days</h3>
+                <a href="/static/dyn/last-7.png" data-lightbox="graph">
+                    <img src="/static/dyn/last-7.png" alt="last-7 graph">
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

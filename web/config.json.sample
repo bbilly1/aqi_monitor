@@ -1,0 +1,17 @@
+{
+    "aqi_monitor": {
+        "authUsername": "user",
+        "authPassword": "password"
+    },
+    "openweathermap": {
+        "api_key": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+        "lat": 40.71,
+        "lon": -74.00
+    },
+    "postgres": {
+        "db_host": "postgres",
+        "db_database": "aqi",
+        "db_user": "aqi",
+        "db_password": "xxxxxxxxxxxxxxxxxxxx"
+    }
+}

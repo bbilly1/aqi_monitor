@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% if title %}
+        <title>AQI - {{ title }}</title>
+    {% else %}
+        <title>AQI</title>
+    {% endif %}
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <script src="{{ url_for('static', filename='js/lightbox.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/aqi.js') }}"></script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/lightbox.css') }}">
+</head>
+<body>
+    <div class="preload">
+        <img src="{{ url_for('static', filename='img/cloud_colors.gif') }}" alt="cloud_animation">
+    </div>
+    <div class="full-width col_bg">
+        <div class="col-box">
+            <!-- <ul>
+                <p>Latest updates:</p>
+                <li><span class="content-date">03.04.2021:</span> Added March summary on new <a href="/monthly">monthly</a> page</li>
+            </ul> -->
+        </div>
+    </div>
+    <div class="full-width col_lightbg">
+        <div class="content title">
+            <div class="title-text">
+                <h1>Live Air Quality</h1>
+                <h2>in Luang Prabang Laos PDR</h2>
+                <p>Last updated: <span id="timestamp"></span></p>
+            </div>
+            <div class="title-nav">
+                <ul>
+                    <a href="/"><li class="col_border">Home</li></a>
+                    <a href="/about"><li class="col_border">About</li></a>
+                    <a href="/graphs"><li class="col_border">Graphs</li></a>
+                    <a href="/monthly"><li class="col_border">Monthly</li></a>
+                </ul>
+            </div>
+        </div>
+    </div>
+    {% block content %}{% endblock %}
+    <div class="full-width col_bg">
+        <div class="col-box">
+            <p>© 2021 | <a href="https://github.com/bbilly1/aqi_monitor" target="_blank">Documentation</a></p>
+        </div>
+    </div>
+</body>
+</html>
