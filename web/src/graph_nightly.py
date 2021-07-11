@@ -5,7 +5,7 @@ import json
 
 import numpy as np
 import pandas as pd
-import scipy # pylint: disable=unused-import
+import scipy  # pylint: disable=unused-import
 
 from matplotlib import pyplot as plt
 
@@ -435,6 +435,7 @@ class YearComparison:
             self.axis['y_2'], self.axis['change']
         )
         data_rows = list(zipped)
+        data_rows.reverse()
         data_rows.insert(0, avg_row)
         json_dict = json.dumps({"data": data_rows})
         # write to file
