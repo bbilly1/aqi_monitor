@@ -1,7 +1,7 @@
 """ handle all monthly tasks """
 
 import json
-from os import path
+from os import listdir
 
 from datetime import datetime, timedelta
 
@@ -17,40 +17,76 @@ from src.helper import plt_fill
 class MonthStatus:
     """ check what needs to be done """
 
-    def __init__(self):
-        self.m_stamp, self.y_stamp = (None, None)
-        self.get_epoch()
-        self.found = self.check_needed()
+    ARCHIVE_PATH = 'static/dyn/monthly'
+    FIRST_MONTH = (2021, 3)
 
-    def get_epoch(self):
-        """ create relevant timestamps """
+    def __init__(self):
+        self.missing = self.check_missing()
+        self.missing_stamps = self.build_missing_timestamps()
+
+    @staticmethod
+    def get_epoch(now):
+        """ create relevant timestamps for month passed as datetime """
         # last month
-        now = datetime.now()
-        m_end = datetime(now.year, now.month, day=1) - timedelta(seconds=1)
-        m_start = datetime(m_end.year, m_end.month, day=1)
+        m_start = datetime(now.year, now.month, day=1)
+        m_end = datetime(
+            m_start.year, m_start.month + 1, day=1
+        ) - timedelta(seconds=1)
         m_stamp = (int(m_start.strftime('%s')), int(m_end.strftime('%s')))
         # last year
-        y_now = now.replace(year=now.year - 1)
-        y_end = datetime(y_now.year, y_now.month, day=1) - timedelta(seconds=1)
-        y_start = datetime(y_end.year, y_end.month, day=1)
+        y_start = m_start.replace(year=m_start.year - 1)
+        y_end = datetime(
+            y_start.year, y_start.month + 1, day=1
+        ) - timedelta(seconds=1)
         y_stamp = (int(y_start.strftime('%s')), int(y_end.strftime('%s')))
-        # set
-        self.m_stamp = m_stamp
-        self.y_stamp = y_stamp
+        return (m_stamp, y_stamp)
 
-    def check_needed(self):
+    def check_missing(self):
         """ check if current months already exists """
-        file_name = datetime.fromtimestamp(self.m_stamp[0]).strftime('%Y-%m')
-        file_path = path.join('static/dyn/monthly', file_name + '.png')
-        found = path.isfile(file_path)
-        return found
+        today = datetime.now()
+        last_month = datetime(
+            today.year, today.month, day=1
+        ) - timedelta(seconds=1)
+        m_stamp, _ = self.get_epoch(last_month)
+        all_files = [i for i in listdir(self.ARCHIVE_PATH) if '.png' in i]
+
+        exported = []
+        for file in all_files:
+            year, month = file.split('.')[0].split('-')
+            exported.append((int(year), int(month)))
+
+        current_m = datetime.fromtimestamp(m_stamp[0])
+        years = range(self.FIRST_MONTH[0], current_m.year + 1)
+
+        missing = []
+        for year in years:
+            if year == self.FIRST_MONTH[0]:
+                months = range(self.FIRST_MONTH[1], current_m.month + 1)
+            else:
+                months = range(1, current_m.month + 1)
+
+            missing = [(year, i) for i in months if (year, i) not in exported]
+
+        return missing
+
+    def build_missing_timestamps(self):
+        """ build timestamps for missing months """
+        missing_stamps = []
+
+        for missing_month in self.missing:
+            year, month = missing_month
+            time_obj = datetime(year, month, 2)
+            missing_stamp = self.get_epoch(time_obj)
+            missing_stamps.append(missing_stamp)
+
+        return missing_stamps
 
 
-class MonthGenerator(MonthStatus):
+class MonthGenerator():
     """ create the monthly graph and json table """
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, timestamps):
+        self.m_stamp, self.y_stamp = timestamps
         self.m_rows, self.y_rows = self.get_data()
         self.axis = self.build_axis()
 
@@ -120,6 +156,7 @@ class MonthGenerator(MonthStatus):
         date_file = date_month.strftime('%Y-%m')
         month_short = date_month.strftime('%b')
         file_name = 'static/dyn/monthly/' + date_file + '.png'
+        print(f'exporting graph for {date_title}')
         # build ticks
         y_max = np.ceil(max(y_1.append(y_2)) / 50) * 50 + 50
         x_range = np.arange(0, len(x), step=9)
@@ -208,12 +245,13 @@ def main():
     """ main to export monthly graph an table json """
     # check if needed
     month_status = MonthStatus()
-    if month_status.found:
-        print('monthly already created, skipping...')
+    if not month_status.missing:
+        print('all monthly already created, skipping...')
         return
 
     # create
     print('creating monthly graph and json file')
-    month_generator = MonthGenerator()
-    month_generator.write_plt()
-    month_generator.write_table()
+    for month in month_status.missing_stamps:
+        month_generator = MonthGenerator(month)
+        month_generator.write_plt()
+        month_generator.write_table()
