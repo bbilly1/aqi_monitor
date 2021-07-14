@@ -158,15 +158,15 @@ a {
 
 .aqi_box {
     position: absolute;
-    top: 45%;
-    left: 57%;
+    top: 43%;
+    left: 55%;
     text-align: right;
     transform: translate(-50%, -50%);
     color: #fff;
 }
 
 .aqi_box h1 {
-    font-size: 15em;
+    font-size: 16em;
     margin: 0;
 }
 
@@ -200,7 +200,7 @@ a {
 
 .weather_icon img {
     width: 50px;
-    margin: 10px;
+    margin: 5px;
 }
 /* weather end */
 /* category start */
@@ -210,6 +210,12 @@ a {
     justify-content: space-between;
 }
 
+.category > div {
+    flex: 1;
+}
+.cat-icon {
+    text-align: center;
+}
 .cat-icon img {
     width: 100%;
     max-width: 200px;
@@ -223,8 +229,8 @@ a {
 .cat-item.active {
     transform: scale(1.2);
     font-size: 1.1em;
-    margin: 15px;
-    box-shadow: darkgray 5px 5px;
+    margin: 17px;
+    box-shadow: darkgray 4px 4px;
     font-weight: bold;   
 }
 /* category end */
@@ -314,15 +320,14 @@ a {
     }
     .title-nav li {
         float: left;
-        padding: 10px;
+        padding: 5px;
+        margin: 5px;
     }
     #aqiValue {
-        font-size: 6em;
+        font-size: 8em;
     }
-    .aqi_box {
-        top: 38%;
-        left: 50%;
-        width: 60%;
+    #aqiCategory {
+        font-size: 1.5em;
     }
     .weather {
         flex-wrap: wrap;
@@ -337,6 +342,9 @@ a {
     .category {
         display: block;
         text-align: center;
+    }
+    .cat-bar {
+        padding: 0 20px;
     }
     .cat-item {
         width: 70%;
