@@ -67,7 +67,7 @@ class IngestLine:
     def add_aqi(self):
         """ add aqi_value and aqi_category keys from pm2.5 value """
 
-        aqi_breakpoints = [
+        aqi_bp = [
             ('Good', 0, 12.0, 0, 50),
             ('Moderate', 12.1, 35.4, 51, 100),
             ('Unhealthy for Sensitive Groups', 35.5, 55.4, 101, 150),
@@ -77,11 +77,9 @@ class IngestLine:
         ]
 
         pm25 = self.input_json['pm25']
-        for i in aqi_breakpoints:
-            aqi_category, p_low, p_high, a_low, a_high = i
-            if p_low < pm25 < p_high:
-                # found it
-                break
+
+        category = [i for i in aqi_bp if i[2] >= pm25][0]
+        aqi_category, p_low, p_high, a_low, a_high = category
 
         aqi = (a_high - a_low) / (p_high - p_low) * (pm25 - p_low) + a_low
 
