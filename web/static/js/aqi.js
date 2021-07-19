@@ -72,7 +72,7 @@ function rmPreload() {
 // reload current.png from remote
 function refreshImg() {
     var timestamp = new Date().getTime();
-    var newLink = "/dyn/current.png?t=" + timestamp;
+    var newLink = "/static/dyn/current.png?t=" + timestamp;
     var lastThreeImg = document.getElementById('last3-img');
     var lastThreeA = document.getElementById('last3-a');
     try {
