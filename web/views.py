@@ -103,6 +103,7 @@ def monthly():
 def ingest():
     """ handle post request from monitor """
     post_data = request.json
+    print(post_data)
     insert_data(post_data)
     return 'ingest'
 
