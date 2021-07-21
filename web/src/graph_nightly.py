@@ -428,7 +428,7 @@ class YearComparison:
             avg_change = 'up'
         else:
             avg_change = 'same'
-        avg_row = ('avg 7 days', avg, y_avg, avg_change)
+        avg_row = ('avg 10 days', avg, y_avg, avg_change)
         # zip it
         zipped = zip(
             self.axis['x'], self.axis['y_1'],
