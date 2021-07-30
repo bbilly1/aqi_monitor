@@ -59,6 +59,19 @@ class IngestLine:
         self.aqi_query = None
         self.weather_query = None
         self.input_json = data
+        self.return_value = self.validate_input()
+
+    def validate_input(self):
+        """ validate the json data recieved from monitor """
+
+        for value in self.input_json.values():
+            if not value:
+                return 'reboot'
+
+        return 'ingest'
+
+    def process_input(self):
+        """ process the input json into queries """
         self.add_aqi()
         self.add_timestamp()
         self.add_weather()
@@ -234,10 +247,19 @@ def get_current():
 
 def insert_data(data):
     """ called from ingest route to make the db insert """
-
+    sensor_id = data['sensor_id']
+    # create ingest instance
     ingest = IngestLine(data)
-
+    return_value = ingest.return_value
+    # check for errors
+    if return_value == 'reboot':
+        print(f'calling for reboot for sensonr id: {sensor_id}')
+        return return_value
+    # continue when no errors
+    ingest.process_input()
     db_handler = DatabaseConnect()
     _ = db_handler.db_execute(ingest.aqi_query)
     _ = db_handler.db_execute(ingest.weather_query)
     db_handler.db_close()
+
+    return return_value
