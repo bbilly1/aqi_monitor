@@ -38,12 +38,15 @@ class NightlyPlots:
 
         colors = []
         for value in y:
-            for break_point in breakpoints:
-                color, min_val, max_val = break_point
-                if min_val < value <= max_val:
-                    # found it
-                    colors.append(color)
-                    break
+            if isinstance(value, pd._libs.missing.NAType):
+                colors.append('#ffffff')
+            else:
+                for break_point in breakpoints:
+                    color, min_val, max_val = break_point
+                    if min_val < value <= max_val:
+                        # found it
+                        colors.append(color)
+                        break
 
         return colors
 
@@ -410,8 +413,8 @@ class YearComparison:
         # return axis
         axis = {
             'x': mean['timestamp'],
-            'y_1': mean['now_aqi'].astype('int'),
-            'y_2': mean['year_aqi'].astype('int'),
+            'y_1': mean['now_aqi'].astype('Int64'),
+            'y_2': mean['year_aqi'].astype('Int64'),
             'change': mean['change']
         }
         return axis
@@ -430,9 +433,11 @@ class YearComparison:
             avg_change = 'same'
         avg_row = ('avg 10 days', avg, y_avg, avg_change)
         # zip it
+        y_2 = self.axis['y_2'].astype(object).fillna("nan")
+        y_2_change = self.axis['change'].astype(object).fillna("nan")
         zipped = zip(
-            self.axis['x'], self.axis['y_1'],
-            self.axis['y_2'], self.axis['change']
+            self.axis['x'], self.axis['y_1'].astype(object),
+            y_2, y_2_change
         )
         data_rows = list(zipped)
         data_rows.reverse()
@@ -446,7 +451,7 @@ class YearComparison:
         """ write year comparison bar chart """
         x = self.axis['x']
         y_1 = self.axis['y_1']
-        y_2 = self.axis['y_2']
+        y_2 = self.axis['y_2'].fillna(value=0)
         # build colors
         col_y_1 = NightlyPlots.color_colums(y_1)
         col_y_2 = NightlyPlots.color_colums(y_2)
