@@ -246,6 +246,9 @@ function colorTables() {
             } else if (cellContent == 'same') {
                 cell.textContent = '\u301C';
                 cell.style.backgroundColor = '#bdbdbd';
+            } else if (cellContent == 'nan') {
+                cell.style.backgroundColor = '#eeeeee';
+                cell.style.color = '#737373';
             } else {
                 try {
                     var backgroundColor = colorConfig[cellContent][0];
