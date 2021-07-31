@@ -326,8 +326,13 @@ a {
     #aqiValue {
         font-size: 8em;
     }
+    #aqi-label {
+        text-align: center;
+    }
     #aqiCategory {
-        font-size: 1.5em;
+        margin-top: -10px;
+        font-size: 1.4em;
+        text-align: center;
     }
     .weather {
         flex-wrap: wrap;
