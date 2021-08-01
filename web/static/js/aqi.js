@@ -64,9 +64,11 @@ function rmPreload() {
     // scrollbar
     document.querySelector('body').style.overflow = 'unset'
     // sticky
-    // const topBar = document.querySelector('.colorbox');
-    // topBar.style.position = 'sticky';
-    // topBar.style.position = '-webkit-sticky';
+    const topBar = document.getElementById('topbar');
+    topBar.style.position = 'sticky';
+    topBar.style.position = '-webkit-sticky';
+    topBar.style.top = 0;
+    topBar.style.zIndex = 1;
 }
 
 // reload current.png from remote

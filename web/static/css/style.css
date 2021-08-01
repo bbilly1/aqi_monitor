@@ -68,6 +68,7 @@ a {
 }
 
 .content-subtitle {
+    width: 70%;
     max-width: 900px;
     margin-left: auto;
     margin-right: auto;
@@ -301,7 +302,8 @@ a {
 
 /* responsiv start */
 @media screen and (max-width: 1000px) {
-    .content {
+    .content,
+    .content-subtitle {
         width: 90%;
     }
 }
@@ -310,7 +312,8 @@ a {
     h1 {
         font-size: 2.5em;
     }
-    .content {
+    .content,
+    .content-subtitle {
         width: 100%;
     }
     .title {
@@ -327,10 +330,10 @@ a {
         font-size: 8em;
     }
     #aqi-label {
+        margin-top: -10px;
         text-align: center;
     }
     #aqiCategory {
-        margin-top: -10px;
         font-size: 1.4em;
         text-align: center;
     }
@@ -365,11 +368,14 @@ a {
         margin: 20px 0;
     }
     .graph {
-        display: block;
+        flex-wrap: wrap;
         padding: 0;
     }
+    .graph-3d {
+        flex-wrap: wrap-reverse;
+    }
     .graph-item {
-        margin: 20px 0;
+        margin: 10px 0;
     }
     .category-table td {
         min-width: 80px;
