@@ -43,7 +43,7 @@ scheduler.add_job(
     nightly_graph, trigger="cron", day='*', hour='1', minute='1', name='night'
 )
 scheduler.add_job(
-    nightly_graph, trigger="cron", day='*', hour='1', minute='2', name='month'
+    monthly_graph, trigger="cron", day='*', hour='1', minute='2', name='month'
 )
 scheduler.start()
 
