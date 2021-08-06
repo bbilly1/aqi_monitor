@@ -395,7 +395,11 @@ class YearComparison:
         df = pd.DataFrame(data)
         indexed = df.set_index('timestamp')
         indexed.sort_values(by=['timestamp'], inplace=True)
-        year_mean = indexed.resample('1d').mean().round()
+        # skip if empty
+        if len(indexed) == 0:
+            year_mean = indexed
+        else:
+            year_mean = indexed.resample('1d').mean().round()
         year_mean.reset_index(level=0, inplace=True)
         # merge the two
         mean['year_aqi'] = year_mean['year_aqi']
@@ -423,14 +427,19 @@ class YearComparison:
         """ write year comparison table json """
         # build average row on top
         avg = int(self.axis['y_1'].mean())
-        y_avg = int(self.axis['y_2'].mean())
-        diff_avg = (avg - y_avg) / avg
-        if diff_avg <= -0.15:
-            avg_change = 'down'
-        elif diff_avg >= 0.15:
-            avg_change = 'up'
-        else:
-            avg_change = 'same'
+        # skip on empty
+        try:
+            y_avg = int(self.axis['y_2'].mean())
+            diff_avg = (avg - y_avg) / avg
+            if diff_avg <= -0.15:
+                avg_change = 'down'
+            elif diff_avg >= 0.15:
+                avg_change = 'up'
+            else:
+                avg_change = 'same'
+        except TypeError:
+            y_avg = 'nan'
+            avg_change = 'nan'
         avg_row = ('avg 10 days', avg, y_avg, avg_change)
         # zip it
         y_2 = self.axis['y_2'].astype(object).fillna("nan")
