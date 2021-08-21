@@ -65,7 +65,7 @@ class IngestLine:
         """ validate the json data recieved from monitor """
 
         for value in self.input_json.values():
-            if not value:
+            if isinstance(value, bool):
                 return 'reboot'
 
         return 'ingest'
