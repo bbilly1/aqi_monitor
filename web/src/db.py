@@ -86,7 +86,7 @@ class IngestLine:
             ('Unhealthy for Sensitive Groups', 35.5, 55.4, 101, 150),
             ('Unhealthy', 55.5, 150.4, 151, 200),
             ('Very Unhealthy', 150.5, 250.4, 201, 300),
-            ('Hazardous', 250.5, 500.4, 301, 500),
+            ('Hazardous', 250.5, 1000, 301, 1000),
         ]
 
         pm25 = self.input_json['pm25']
