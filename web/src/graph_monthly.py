@@ -153,8 +153,8 @@ class MonthGenerator():
     def write_plt(self):
         """ write monthly plot """
         x = self.axis['x']
-        y_1 = self.axis['y_1']
-        y_2 = self.axis['y_2']
+        y_1 = self.axis['y_1'].replace(0, 1)
+        y_2 = self.axis['y_2'].replace(0, 1)
         # parse timestamp
         date_month = datetime.fromtimestamp(self.m_rows[-1][0]).date()
         date_title = date_month.strftime('%b %Y')

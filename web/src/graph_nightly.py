@@ -151,8 +151,8 @@ class LastSevenDays:
     def write_plt(self):
         """ write last 7 days plot to disk """
         x = self.axis['x']
-        y_1 = self.axis['y_1']
-        y_2 = self.axis['y_2']
+        y_1 = self.axis['y_1'].replace(0, 1)
+        y_2 = self.axis['y_2'].replace(0, 1)
         x_ticks = self.axis['x_ticks']
         y_max = np.ceil(max(y_1.append(y_2))/50)*50 + 50
         # plot
@@ -229,7 +229,7 @@ class LastThreeDays:
     def write_plt(self, axis, day):
         """ write daily plot to disk """
         x = axis['x']
-        y = axis['y']
+        y = axis['y'].replace(0, 1)
         x_ticks = np.arange(0, 97, step=8)
         plt.style.use('seaborn')
         plt.plot(x, y, color='#313131',)

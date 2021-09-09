@@ -81,7 +81,7 @@ class CurrentPlot:
     def write_plt(self):
         """ save plot to file """
         x = self.axis['x']
-        y = self.axis['y']
+        y = self.axis['y'].replace(0, 1)
         x_ticks = self.axis['x_ticks']
         # calc ticks
         y_max = np.ceil(y.max()/50)*50 + 50
