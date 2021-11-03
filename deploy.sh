@@ -14,7 +14,7 @@ rsync --progress -a --delete-after \
     web "$host":docker/
 
 ssh "$host" 'docker build -t bbilly1/lpb-air:latest docker/web'
-ssh "$host" 'docker-compose -f docker/ up -d'
+ssh "$host" 'docker-compose -f docker/docker-compose.yml up -d'
 
 ##
 exit 0
