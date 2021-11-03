@@ -35,7 +35,8 @@ nightly_graph()
 monthly_graph()
 
 # start scheduler
-scheduler = BackgroundScheduler()
+timezone = os.environ.get("TZ")
+scheduler = BackgroundScheduler(timezone=timezone)
 scheduler.add_job(
     current_graph, trigger="cron", minute='*/5', name='current_graph'
 )
