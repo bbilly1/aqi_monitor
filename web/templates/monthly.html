@@ -11,7 +11,9 @@
             </div>
             <div class="content graph">
                 <div class="graph-item">
-                    <img src="{{month.month_graph}}" alt="{{month.month_name}} graph">
+                    <a href="{{month.month_graph}}" data-lightbox="monthly">
+                        <img src="{{month.month_graph}}" alt="{{month.month_name}} graph">
+                    </a>
                 </div>
                 <div class="graph-item">
                     {{month.table}}
