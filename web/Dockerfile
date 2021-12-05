@@ -1,4 +1,4 @@
-FROM python:3.9.7-slim-bullseye
+FROM python:3.9.9-slim-bullseye
 
 RUN apt-get clean && apt-get -y update && \
     apt-get -y install --no-install-recommends build-essential
