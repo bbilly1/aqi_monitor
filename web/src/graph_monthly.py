@@ -29,15 +29,21 @@ class MonthStatus:
         """ create relevant timestamps for month passed as datetime """
         # last month
         m_start = datetime(now.year, now.month, day=1)
-        m_end = datetime(
-            m_start.year, m_start.month + 1, day=1
-        ) - timedelta(seconds=1)
+        if m_start.month < 12:
+            m_end = datetime(
+                m_start.year, m_start.month + 1, day=1
+            ) - timedelta(seconds=1)
+        elif m_start.month == 12:
+            m_end = datetime(m_start.year + 1, 1, 1) - timedelta(seconds=1)
         m_stamp = (int(m_start.strftime('%s')), int(m_end.strftime('%s')))
         # last year
         y_start = m_start.replace(year=m_start.year - 1)
-        y_end = datetime(
-            y_start.year, y_start.month + 1, day=1
-        ) - timedelta(seconds=1)
+        if y_start.month < 12:
+            y_end = datetime(
+                y_start.year, y_start.month + 1, day=1
+            ) - timedelta(seconds=1)
+        elif y_start.month == 12:
+            y_end = datetime(y_start.year + 1, 1, 1) - timedelta(seconds=1)
         y_stamp = (int(y_start.strftime('%s')), int(y_end.strftime('%s')))
         return (m_stamp, y_stamp)
 
