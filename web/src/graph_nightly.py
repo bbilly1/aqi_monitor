@@ -154,7 +154,7 @@ class LastSevenDays:
         y_1 = self.axis['y_1'].replace(0, 1)
         y_2 = self.axis['y_2'].replace(0, 1)
         x_ticks = self.axis['x_ticks']
-        y_max = np.ceil(max(y_1.append(y_2))/50)*50 + 50
+        y_max = np.ceil(max(pd.concat([y_1, y_2]))/50)*50 + 50
         # plot
         plt.style.use('seaborn')
         plt.plot(x, y_1, color='#313131', label='2hour avg')
@@ -279,7 +279,7 @@ class PmGraphs:
         }
         # max
         self.y_max = np.ceil(
-            max(axis['y_pm25'].append(axis['y_pm10'])) / 25
+            max(pd.concat([axis['y_pm25'], axis['y_pm10']])) / 25
         ) * 25 + 25
         return axis
 
@@ -465,7 +465,7 @@ class YearComparison:
         col_y_1 = NightlyPlots.color_colums(y_1)
         col_y_2 = NightlyPlots.color_colums(y_2)
         # set ticks
-        y_max = int(np.ceil((max(y_1.append(y_2)) / 50)) * 50 + 50)
+        y_max = int(np.ceil((max(pd.concat([y_1, y_2])) / 50)) * 50 + 50)
         x_indexes = np.arange(len(x))
         # build plot
         width = 0.25

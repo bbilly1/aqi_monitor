@@ -168,7 +168,7 @@ class MonthGenerator():
         file_name = 'static/dyn/monthly/' + date_file + '.png'
         print(f'exporting graph for {date_title}')
         # build ticks
-        y_max = np.ceil(max(y_1.append(y_2)) / 50) * 50 + 50
+        y_max = np.ceil(max(pd.concat([y_1, y_2])) / 50) * 50 + 50
         x_range = np.arange(0, len(x), step=9)
         last_day = int(x.max().split()[0])
         x_numbers = np.arange(1, last_day + 1, step=3)
