@@ -1,7 +1,7 @@
 """ handle all monthly tasks """
 
 import json
-from os import listdir
+from os import listdir, path
 
 from datetime import datetime, timedelta
 
@@ -48,30 +48,29 @@ class MonthStatus:
         return (m_stamp, y_stamp)
 
     def check_missing(self):
-        """ check if current months already exists """
+        """check which months are missing"""
         today = datetime.now()
-        last_month = datetime(
-            today.year, today.month, day=1
-        ) - timedelta(seconds=1)
-        m_stamp, _ = self.get_epoch(last_month)
+        this_month = (today.year, today.month)
         all_files = [i for i in listdir(self.ARCHIVE_PATH) if '.png' in i]
 
-        exported = []
-        for file in all_files:
-            year, month = file.split('.')[0].split('-')
-            exported.append((int(year), int(month)))
-
-        current_m = datetime.fromtimestamp(m_stamp[0])
-        years = range(self.FIRST_MONTH[0], current_m.year + 1)
+        existing = []
+        if all_files:
+            pairs = [tuple(path.splitext(i)[0].split("-")) for i in all_files]
+            existing = [(int(i[0]), int(i[1])) for i in pairs]
 
         missing = []
-        for year in years:
-            if year == self.FIRST_MONTH[0]:
-                months = range(self.FIRST_MONTH[1], current_m.month + 1)
-            else:
-                months = range(1, current_m.month + 1)
 
-            missing = [(year, i) for i in months if (year, i) not in exported]
+        to_check = self.FIRST_MONTH
+        while True:
+            if to_check in existing or to_check == this_month:
+                break
+
+            missing.append(to_check)
+
+            if to_check[1] == 12:
+                to_check = (to_check[0] + 1, 1)
+            else:
+                to_check = (to_check[0], to_check[1] + 1)
 
         return missing
 
