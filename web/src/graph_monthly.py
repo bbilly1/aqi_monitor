@@ -21,7 +21,6 @@ class MonthStatus:
     FIRST_MONTH = (2021, 3)
 
     def __init__(self):
-        self.missing = self.check_missing()
         self.missing_stamps = self.build_missing_timestamps()
 
     @staticmethod
@@ -47,42 +46,51 @@ class MonthStatus:
         y_stamp = (int(y_start.strftime('%s')), int(y_end.strftime('%s')))
         return (m_stamp, y_stamp)
 
-    def check_missing(self):
-        """check which months are missing"""
-        today = datetime.now()
-        this_month = (today.year, today.month)
+    def get_existing(self):
+        """get list of all monthly graphs created"""
         all_files = [i for i in listdir(self.ARCHIVE_PATH) if '.png' in i]
 
         existing = []
         if all_files:
             pairs = [tuple(path.splitext(i)[0].split("-")) for i in all_files]
             existing = [(int(i[0]), int(i[1])) for i in pairs]
+        
+        existing.sort()
 
-        missing = []
+        return existing
+
+    def get_expected(self):
+        """get a list of expected monthly graphs"""
+        today = datetime.now()
+        this_month = datetime(today.year, today.month, 1)
+        last_stamp = (this_month.year, this_month.month)
+
+        expected = []
 
         to_check = self.FIRST_MONTH
         while True:
-            if to_check in existing or to_check == this_month:
+            if to_check == last_stamp:
                 break
 
-            missing.append(to_check)
-
+            expected.append(to_check)
             if to_check[1] == 12:
                 to_check = (to_check[0] + 1, 1)
             else:
                 to_check = (to_check[0], to_check[1] + 1)
 
-        return missing
+        return expected
 
     def build_missing_timestamps(self):
-        """ build timestamps for missing months """
-        missing_stamps = []
+        """check which months are missing"""
+        existing = self.get_existing()
+        expected = self.get_expected()
 
-        for missing_month in self.missing:
-            year, month = missing_month
-            time_obj = datetime(year, month, 2)
-            missing_stamp = self.get_epoch(time_obj)
-            missing_stamps.append(missing_stamp)
+        missing_stamps = []
+        for month_tpl in expected:
+            if month_tpl not in existing:
+                time_obj = datetime(month_tpl[0], month_tpl[1], 2)
+                missing_stamp = self.get_epoch(time_obj)
+                missing_stamps.append(missing_stamp)
 
         return missing_stamps
 
@@ -265,7 +273,7 @@ def main():
     """ main to export monthly graph an table json """
     # check if needed
     month_status = MonthStatus()
-    if not month_status.missing:
+    if not month_status.missing_stamps:
         print('all monthly already created, skipping...')
         return
 
