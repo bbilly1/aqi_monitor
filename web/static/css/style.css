@@ -300,6 +300,18 @@ a {
 }
 /* about end */
 
+/* maintenance start */
+.maintenance-wrap {
+    background-color: rgb(219, 228, 209);
+    min-height: 100vh;
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 10px;
+}
+/* maintenance end */
+
 /* responsiv start */
 @media screen and (max-width: 1000px) {
     .content,

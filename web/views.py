@@ -21,6 +21,24 @@ matplotlib.use('Agg')
 # start up
 app = Flask(__name__)
 
+# maintenance mode
+is_maintenance_mode = bool(os.environ.get("MAINTENANCE"))
+@app.before_request
+def check_for_maintenance():
+    print(request.path)
+    ALLOW = ["/static/css/style.css", "/static/favicon.ico", "/static/font/Rubik-Bold.ttf", "/static/font/Rubik-Regular.ttf"]
+    if is_maintenance_mode and request.path not in ALLOW: 
+        # return redirect(url_for('maintenance'))
+        # Or alternatively, dont redirect 
+        # return 'Sorry, off for maintenance!', 503
+        return render_template('maintenance.html'), 503
+
+
+# @app.route('/maintenance')
+# def maintenance():
+#     return 'Sorry, off for maintenance!', 503
+
+
 CONFIG = get_config()
 auth = HTTPBasicAuth()
 aqi_user = CONFIG['aqi_monitor']
@@ -28,25 +46,26 @@ USER_DATA = {
     aqi_user['authUsername']: aqi_user['authPassword']
 }
 
-# initial export
-print('initial export')
-current_graph()
-nightly_graph()
-monthly_graph()
+if not is_maintenance_mode:
+    # initial export
+    print('initial export')
+    current_graph()
+    nightly_graph()
+    monthly_graph()
 
-# start scheduler
-timezone = os.environ.get("TZ")
-scheduler = BackgroundScheduler(timezone=timezone)
-scheduler.add_job(
-    current_graph, trigger="cron", minute='*/5', name='current_graph'
-)
-scheduler.add_job(
-    nightly_graph, trigger="cron", day='*', hour='1', minute='1', name='night'
-)
-scheduler.add_job(
-    monthly_graph, trigger="cron", day='*', hour='1', minute='2', name='month'
-)
-scheduler.start()
+    # start scheduler
+    timezone = os.environ.get("TZ")
+    scheduler = BackgroundScheduler(timezone=timezone)
+    scheduler.add_job(
+        current_graph, trigger="cron", minute='*/5', name='current_graph'
+    )
+    scheduler.add_job(
+        nightly_graph, trigger="cron", day='*', hour='1', minute='1', name='night'
+    )
+    scheduler.add_job(
+        monthly_graph, trigger="cron", day='*', hour='1', minute='2', name='month'
+    )
+    scheduler.start()
 
 
 @auth.verify_password
