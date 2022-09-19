@@ -34,6 +34,7 @@ services:
     environment: 
       - APP_NAME=FlaskAqi
       - TZ=Asia/Bangkok
+      # - MAINTENANCE=True
     expose: 
       - "8080"
   # nginx infront of uwsgi

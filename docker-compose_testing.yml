@@ -1,0 +1,36 @@
+version: "3.2"
+
+services:
+  # backend flask
+  flask:
+    image: bbilly1/lpb-air
+    container_name: flask
+    restart: always
+    volumes:
+      - ./volume/flask/dyn:/app/static/dyn
+    environment: 
+      - APP_NAME=FlaskAqi
+      - TZ=Asia/Bangkok
+      # - MAINTENANCE=True
+    expose: 
+      - "8080"
+  # nginx infront of uwsgi
+  nginx:
+    build: ./nginx
+    container_name: backend_nginx
+    restart: always
+    ports: 
+      - "80:80"
+    depends_on:
+      - flask
+  # backend postgres
+  postgres:
+    image: postgres:14
+    container_name: postgres
+    restart: always
+    volumes:
+      - ./volume/postgres14:/var/lib/postgresql/data/
+    env_file:
+      - ./env/postgres.env
+    expose:
+      - "5432"
