@@ -1,5 +1,6 @@
 """ handle current graph export """
 
+import shutil
 from datetime import datetime
 
 import numpy as np
@@ -9,6 +10,8 @@ from matplotlib import pyplot as plt
 
 from src.db import DatabaseConnect
 from src.helper import get_config, plt_fill
+
+FALLBACK_GRAPH = "static/img/fallback.png"
 
 
 class CurrentPlot:
@@ -112,3 +115,4 @@ def main():
         current.write_plt()
     else:
         print('no rows found to export current graph')
+        shutil.copy(FALLBACK_GRAPH, current.FILENAME)

@@ -2,6 +2,7 @@
 
 from datetime import datetime, timedelta
 import json
+import shutil
 
 import numpy as np
 import pandas as pd
@@ -11,6 +12,8 @@ from matplotlib import pyplot as plt
 
 from src.db import DatabaseConnect
 from src.helper import get_config, plt_fill
+
+FALLBACK_GRAPH = "static/img/fallback.png"
 
 
 class NightlyPlots:
@@ -79,26 +82,46 @@ class NightlyPlots:
         date_from = datetime.fromtimestamp(day_from).strftime('%d %b')
         date_until = datetime.fromtimestamp(day_until).strftime('%d %b')
         plt_title = f'AQI values from: {date_from} until {date_until}'
-        _ = LastSevenDays(rows, plt_title)
+        handler = LastSevenDays(rows, plt_title)
+        if handler.rows:
+            handler.create()
+        else:
+            handler.fallback()
 
     def recreate_last_3(self):
         """ last three days """
-        _ = LastThreeDays(self.rows, self.now)
+        handler = LastThreeDays(self.rows, self.now)
+        if handler.rows:
+            handler.create()
+        else:
+            handler.fallback()
 
     def recreate_pm_chart(self):
         """ recreating pm2.5 and pm10 charts """
-        _ = PmGraphs(self.rows)
+        handler = PmGraphs(self.rows)
+        if handler.rows:
+            handler.create()
+        else:
+            handler.fallback()
 
     def recreate_hour_bar(self):
         """ recreate hourly average through day bar chart """
         day_until = int(self.now.date().strftime('%s'))
         day_from = day_until - 3 * 24 * 60 * 60
         rows = [i for i in self.rows if day_from < i[0] < day_until]
-        _ = HourBar(rows)
+        handler = HourBar(rows)
+        if handler.rows:
+            handler.create()
+        else:
+            handler.fallback()
 
     def recreate_year_comparison(self):
         """ recreate year comparison chart and table for json """
-        _ = YearComparison(self.rows, self.y_rows)
+        handler = YearComparison(self.rows, self.y_rows)
+        if handler.rows:
+            handler.create()
+        else:
+            handler.fallback()
 
 
 class LastSevenDays:
@@ -110,7 +133,15 @@ class LastSevenDays:
         print('recreating last seven days')
         self.plt_title = plt_title
         self.rows = rows
-        self.axis = self.build_axis()
+
+    def fallback(self):
+        """fallback for no data"""
+        print("use fallback last seven days")
+        shutil.copy(FALLBACK_GRAPH, self.FILENAME)
+
+    def create(self):
+        """create graphs"""
+        self.build_axis()
         self.write_plt()
 
     def build_axis(self):
@@ -179,7 +210,17 @@ class LastThreeDays:
         self.y_max = None
         self.now = now
         self.rows = rows
+
+    def create(self):
+        """create graphs"""
         self.rebuild_last_three()
+
+    def fallback(self):
+        """fallback for empty rows"""
+        print("use fallback for last three days")
+        for i in range(1, 4):
+            new_path = f"static/dyn/day-{i}.png"
+            shutil.copy(FALLBACK_GRAPH, new_path)
 
     def rebuild_last_three(self):
         """ recreate all three graphs """
@@ -252,9 +293,19 @@ class PmGraphs:
         print('recreating pm bar charts')
         self.rows = rows
         self.y_max = None
-        self.axis = self.get_axis()
+        self.axis = False
+
+    def create(self):
+        """create pm charts"""
+        self.get_axis()
         self.write_plt(thresh=25, title='2.5')
         self.write_plt(thresh=50, title='10')
+
+    def fallback(self):
+        """use fallback for empty rows"""
+        print("use fallback for pm charts")
+        shutil.copy(FALLBACK_GRAPH, "static/dyn/pm10.png")
+        shutil.copy(FALLBACK_GRAPH, "static/dyn/pm25.png")
 
     def get_axis(self):
         """ get pm2.5 and pm20 axis """
@@ -316,11 +367,21 @@ class PmGraphs:
 class HourBar:
     """ recreate hour by our avg bar chart """
 
+    FILENAME = "static/dyn/hours.png"
+
     def __init__(self, rows):
         print('recreating hour avg bar chart')
         self.rows = rows
-        self.axis = self.get_axis()
+        self.axis = False
+
+    def create(self):
+        """create hour bar chart"""
+        self.get_axis()
         self.write_plt()
+
+    def fallback(self):
+        """fallback for empty rows"""
+        shutil.copy(FALLBACK_GRAPH, self.FILENAME)
 
     def get_axis(self):
         """ get hourly bar chart axis """
@@ -361,7 +422,7 @@ class HourBar:
         plt.xticks(ticks=x_range, labels=x_hours)
         plt.title(plt_title, fontsize=20)
         plt.tight_layout()
-        plt.savefig('static/dyn/hours.png', dpi=300)
+        plt.savefig(self.FILENAME, dpi=300)
         plt.close('all')
         plt.figure()
 
@@ -369,13 +430,25 @@ class HourBar:
 class YearComparison:
     """ export year on year graph and table """
 
+    PLT_FILENAME = "static/dyn/year-graph.png"
+    TABLE_FILENAME = "static/dyn/year-table.json"
+
     def __init__(self, rows, y_rows):
         print('recreating year comparison')
         self.rows = rows
         self.y_rows = y_rows
-        self.axis = self.get_axis()
+        self.axis = False
+
+    def create(self):
+        """create year comparison graphs"""
+        self.get_axis()
         self.write_table()
         self.write_plt()
+
+    def fallback(self):
+        """create fallback"""
+        shutil.copy(FALLBACK_GRAPH, self.PLT_FILENAME)
+        shutil.copy("static/year-table_fallback.json", self.TABLE_FILENAME)
 
     def get_axis(self):
         """ build axis """
@@ -453,7 +526,7 @@ class YearComparison:
         data_rows.insert(0, avg_row)
         json_dict = json.dumps({"data": data_rows})
         # write to file
-        with open('static/dyn/year-table.json', 'w') as f:
+        with open(self.TABLE_FILENAME, 'w') as f:
             f.write(json_dict)
 
     def write_plt(self):
@@ -484,7 +557,7 @@ class YearComparison:
         plt.yticks(np.arange(0, y_max, step=50))
         plt.xticks(ticks=x_indexes, labels=x)
         plt.tight_layout()
-        plt.savefig('static/dyn/year-graph.png', dpi=300)
+        plt.savefig(self.PLT_FILENAME, dpi=300)
         plt.figure()
 
 
