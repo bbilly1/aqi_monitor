@@ -1,5 +1,6 @@
 # python stuff
 __pycache__
+.vscode
 
 # protect real config files
 config.json
