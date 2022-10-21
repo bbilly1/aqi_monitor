@@ -17,7 +17,7 @@ function sync_docker {
         web "$remote_host":docker/
 
     ssh "$remote_host" 'docker build -t bbilly1/lpb-air:latest docker/web'
-    ssh "$remote_host" 'docker-compose -f docker/docker-compose.yml up -d'
+    ssh "$remote_host" 'docker compose -f docker/docker-compose.yml up -d'
 
 }
 
