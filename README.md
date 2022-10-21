@@ -10,7 +10,11 @@ This site is under constant development. The main purpose is educational.
 The webserver is a simple VPS, provisioned with docker-compose.yml.
 
 ## aqi_monitor
-*aqi_monitor.ino* is the arduino script running on the **nodeMCU ESP8266** microcontroller. The microcontroller posts data to the flask backend on a regular interval.
+*aqi_monitor.ino* is the arduino script running on the **nodeMCU ESP8266** microcontroller. The microcontroller posts data to the flask backend on a regular interval. This is a legacy option, not in use any more now due to it's limitations.
+
+## aqi_monitor_py
+Rewritten sensor script in Python, runs on a raspberry pi instead.
+
 Connected to that is:  
 * SDS011: pm2.5 and pm10 sensor from Nova Fitness.
 * BME280: Pressure Humidity Temperature Sensor Module.
