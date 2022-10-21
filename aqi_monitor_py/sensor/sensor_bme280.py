@@ -19,7 +19,6 @@ class BmeSensor:
         print("collect data from bme280")
         self.get_data()
         temperature_values = self.format_data()
-        print(f"bme280 data: {temperature_values}")
 
         return temperature_values
 
