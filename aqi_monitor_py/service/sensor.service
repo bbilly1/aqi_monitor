@@ -1,0 +1,8 @@
+[Unit]
+Description=sensor main.py
+
+[Service]
+User=simon
+Group=simon
+Type=oneshot
+ExecStart=python /home/simon/aqi_monitor/aqi_monitor_py/sensor/main.py

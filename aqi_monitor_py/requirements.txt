@@ -1,0 +1,7 @@
+ipython
+simple-sds011
+requests
+RPi.bme280
+
+cffi
+smbus-cffi

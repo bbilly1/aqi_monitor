@@ -1,0 +1,9 @@
+[Unit]
+Description=sensor main.py
+
+[Timer]
+OnBootSec=1min
+OnUnitActiveSec=3min
+
+[Install]
+WantedBy=multi-user.target
