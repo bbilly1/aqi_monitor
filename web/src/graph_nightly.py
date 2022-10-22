@@ -169,6 +169,7 @@ class LastSevenDays:
         x_range = np.arange(0, 84, step=12)
         x_date_time = pd.to_datetime(mean['timestamp']).dt.date.unique()
         x_dates = np.asarray([i.strftime('%d %b') for i in x_date_time])
+        x_dates.resize(7, refcheck=False)
         x_ticks = x_range, x_dates
         # set axis
         self.axis = {
@@ -215,10 +216,10 @@ class LastThreeDays:
         """create graphs"""
         self.rebuild_last_three()
 
-    def fallback(self):
+    def fallback(self, r_from=1, r_to=4):
         """fallback for empty rows"""
         print("use fallback for last three days")
-        for i in range(1, 4):
+        for i in range(r_from, r_to):
             new_path = f"static/dyn/day-{i}.png"
             shutil.copy(FALLBACK_GRAPH, new_path)
 
@@ -228,6 +229,10 @@ class LastThreeDays:
         all_axis = []
         for day in range(1, 4):
             axis = self.get_axis(day)
+            if not axis:
+                self.fallback(r_from=day, r_to=day + 1)
+                continue
+
             all_axis.append(axis)
         # set y_max
         self.y_max = max([max(i['y']) for i in all_axis]) + 50
@@ -242,6 +247,9 @@ class LastThreeDays:
         day_from = int(day_delta.strftime('%s'))
         day_until = int(day_delta.strftime('%s')) + 60 * 60 * 24
         day_rows = [i for i in self.rows if day_from < i[0] < day_until]
+        if not day_rows:
+            return False
+
         # title
         time_stamp = day_delta.strftime('%Y-%m-%d')
         # build
@@ -323,16 +331,15 @@ class PmGraphs:
         mean = indexed.resample('1d').mean()
         mean.reset_index(level=0, inplace=True)
         # axis
-        axis = {
+        self.axis = {
             'x': mean['timestamp'],
             'y_pm25': mean['pm25'].round(),
             'y_pm10': mean['pm10'].round()
         }
         # max
         self.y_max = np.ceil(
-            max(pd.concat([axis['y_pm25'], axis['y_pm10']])) / 25
+            max(pd.concat([self.axis['y_pm25'], self.axis['y_pm10']])) / 25
         ) * 25 + 25
-        return axis
 
     def write_plt(self, thresh, title):
         """ write plot to disk """
@@ -341,8 +348,8 @@ class PmGraphs:
         x = self.axis['x']
         y = self.axis['y_pm' + file_name]
         # make ticks
-        x_range = np.arange(10).tolist()
         x_date_time = pd.to_datetime(x).dt.date.unique()
+        x_range = np.arange(len(x_date_time)).tolist()
         x_dates = [i.strftime('%d %b') for i in x_date_time]
         # col
         col = []
@@ -398,11 +405,10 @@ class HourBar:
         # regroup by hour
         mean_hour = mean.groupby([mean.index.hour]).mean()
         mean_hour.reset_index(level=0, inplace=True)
-        axis = {
+        self.axis = {
             'x': mean_hour['timestamp'],
             'y': mean_hour['aqi'].round()
         }
-        return axis
 
     def write_plt(self):
         """ write the hour bar chart to disk """
@@ -488,13 +494,12 @@ class YearComparison:
         )
         mean['change'] = np.where(mean['diff'] >= 0.15, 'up', mean['change'])
         # return axis
-        axis = {
+        self.axis = {
             'x': mean['timestamp'],
             'y_1': mean['now_aqi'].astype('Int64'),
             'y_2': mean['year_aqi'].astype('Int64'),
             'change': mean['change']
         }
-        return axis
 
     def write_table(self):
         """ write year comparison table json """
