@@ -133,6 +133,7 @@ class LastSevenDays:
         print('recreating last seven days')
         self.plt_title = plt_title
         self.rows = rows
+        self.axis = False
 
     def fallback(self):
         """fallback for no data"""
@@ -170,14 +171,13 @@ class LastSevenDays:
         x_dates = np.asarray([i.strftime('%d %b') for i in x_date_time])
         x_ticks = x_range, x_dates
         # set axis
-        axis = {
+        self.axis = {
             "x": mean['timestamp'],
             "y_1": mean['aqi'],
             "y_2": mean['avg'],
             "x_ticks": x_ticks,
             "plt_title": self.plt_title
         }
-        return axis
 
     def write_plt(self):
         """ write last 7 days plot to disk """
