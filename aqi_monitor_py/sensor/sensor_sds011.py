@@ -32,7 +32,9 @@ class SDS:
     def startup(self):
         """activate and set mode"""
         self.pm.active = 1
-        sleep(0.5)
+        while self.pm.active.get("value") != 1:
+            sleep(0.5)
+
         self.pm.mode = simple_sds011.MODE_PASSIVE
         print("warm up sensor")
         sleep(20)
