@@ -160,7 +160,11 @@ class LastSevenDays:
         mean['avg'][0] = (mean['avg'].iloc[6] + mean['aqi'][0]) / 2
         mean['avg'][-1] = (mean['avg'].iloc[-6] + mean['aqi'][-1]) / 2
         # smooth
-        mean['avg'].interpolate(method='polynomial', order=3, inplace=True)
+        try:
+            mean['avg'].interpolate(method='polynomial', order=3, inplace=True)
+        except ValueError:
+            mean['avg'].interpolate(method='polynomial', order=1, inplace=True)
+
         mean.reset_index(level=0, inplace=True)
         mean['timestamp'] = mean['timestamp'].dt.strftime('%Y-%m-%d %H:%M')
         mean['aqi'] = mean['aqi'].round()
