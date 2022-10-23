@@ -197,6 +197,7 @@ class MonthGenerator():
         plt.tight_layout()
         plt.savefig(file_name, dpi=300)
         plt.figure()
+        plt.close()
 
     @staticmethod
     def get_aqi(val):
