@@ -1,0 +1,8 @@
+[Unit]
+Description=backup postgres database
+
+[Timer]
+OnCalendar=*-*-* 2:00:00
+
+[Install]
+WantedBy=multi-user.target

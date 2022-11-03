@@ -1,0 +1,8 @@
+[Unit]
+Description=backup postgres database
+
+[Service]
+User=simon
+Group=simon
+Type=oneshot
+ExecStart=bash /home/simon/docker/helper_scripts/db_backup.sh
