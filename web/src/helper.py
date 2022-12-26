@@ -19,26 +19,28 @@ def get_config():
 
 def plt_fill(plt, x, y):
     """ fill colors between break points """
+    x_list = list(x)
+    y_list = list(y)
     plt.fill_between(
-        x, y, y2=0, where=(y > 0), color='#85a762', interpolate=True
+        x_list, y_list, y2=0, where=(y > 0), color='#85a762', interpolate=True
     )  # good
     plt.fill_between(
-        x, y, y2=50, where=(y > 50), color='#d4b93c', interpolate=True
+        x_list, y_list, y2=50, where=(y > 50), color='#d4b93c', interpolate=True
     )  # moderate
     plt.fill_between(
-        x, y, y2=100, where=(y > 100), color='#e96843', interpolate=True
+        x_list, y_list, y2=100, where=(y > 100), color='#e96843', interpolate=True
     )  # ufsg
     plt.fill_between(
-        x, y, y2=150, where=(y > 150), color='#d03f3b', interpolate=True
+        x_list, y_list, y2=150, where=(y > 150), color='#d03f3b', interpolate=True
     )  # unhealthy
     plt.fill_between(
-        x, y, y2=200, where=(y > 200), color='#be4173', interpolate=True
+        x_list, y_list, y2=200, where=(y > 200), color='#be4173', interpolate=True
     )  # vunhealthy
     plt.fill_between(
-        x, y, y2=300, where=(y > 300), color='#714261', interpolate=True
+        x_list, y_list, y2=300, where=(y > 300), color='#714261', interpolate=True
     )  # hazardous
     plt.fill_between(
-        x, y, y2=0, where=(y > 0), color='#ffffff', alpha=0.1, interpolate=True
+        x_list, y_list, y2=0, where=(y > 0), color='#ffffff', alpha=0.1, interpolate=True
     )  # soft
 
 
