@@ -3,7 +3,7 @@ version: "3.2"
 services:
   # backend flask
   flask:
-    image: bbilly1/lpb-air
+    build: ./web
     container_name: flask
     restart: always
     volumes:

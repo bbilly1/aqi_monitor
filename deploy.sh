@@ -16,8 +16,7 @@ function sync_docker {
         --exclude static/dyn \
         web "$remote_host":docker/
 
-    ssh "$remote_host" 'docker build -t bbilly1/lpb-air:latest docker/web'
-    ssh "$remote_host" 'docker compose -f docker/docker-compose.yml up -d'
+    ssh "$remote_host" 'docker compose -f docker/docker-compose.yml up -d --build'
 
 }
 
@@ -36,8 +35,7 @@ function sync_test {
         --exclude static/dyn \
         web "$local_host":docker/
 
-    ssh "$local_host" 'docker build -t bbilly1/lpb-air:latest docker/web'
-    ssh "$local_host" 'docker compose -f docker/docker-compose.yml up -d'
+    ssh "$local_host" 'docker compose -f docker/docker-compose.yml up -d --build'
 
 }
 

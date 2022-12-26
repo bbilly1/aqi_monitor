@@ -26,7 +26,7 @@ services:
       - NGINX_PROXY_CONTAINER=nginx-proxy
   # backend flask
   flask:
-    image: bbilly1/lpb-air
+    build: ./web
     container_name: flask
     restart: always
     volumes:
@@ -62,7 +62,7 @@ services:
       - "5432"
   # umami stats
   umami:
-    image: ghcr.io/mikecao/umami:postgresql-latest
+    image: docker.umami.dev/umami-software/umami:postgresql-latest
     container_name: umami
     expose:
       - "3000"
