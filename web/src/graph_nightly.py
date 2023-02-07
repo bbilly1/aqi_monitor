@@ -11,7 +11,7 @@ import scipy  # pylint: disable=unused-import
 from matplotlib import pyplot as plt
 
 from src.db import DatabaseConnect
-from src.helper import get_config, plt_fill
+from src.helper import chart_fill, get_config, plt_fill
 
 FALLBACK_GRAPH = "static/img/fallback.png"
 
@@ -539,32 +539,24 @@ class YearComparison:
             f.write(json_dict)
 
     def write_plt(self):
-        """ write year comparison bar chart """
-        x = self.axis['x']
-        y_1 = self.axis['y_1']
-        y_2 = self.axis['y_2'].fillna(value=0)
-        # build colors
-        col_y_1 = NightlyPlots.color_colums(y_1)
-        col_y_2 = NightlyPlots.color_colums(y_2)
+        """write year comparison bar chart"""
+        x = self.axis["x"]
+        y_1 = self.axis["y_1"]
+        y_2 = self.axis["y_2"].fillna(value=0)
         # set ticks
         y_max = int(np.ceil((max(pd.concat([y_1, y_2])) / 50)) * 50 + 50)
-        x_indexes = np.arange(len(x))
+        y_ticks = np.arange(0, y_max, step=50)
         # build plot
-        width = 0.25
-        plt_title = 'Daily avg AQI values compared to last year'
-        plt_suptitle = 'left: this year, right: last year'
-        plt.style.use('seaborn')
-        # write bars
-        plt.bar(
-            x_indexes - (width / 2) - 0.02, y_1, color=col_y_1, width=width
+        plt.title("Daily avg AQI values compared to last year", fontsize=15)
+        chart_fill(plt, y_ticks)
+        plt.style.use("seaborn")
+        plt.plot(x, y_1, color="#313131", label="this year")
+        plt.plot(
+            x, y_2, color="#666666", linestyle="dashed", label="last year"
         )
-        plt.bar(
-            x_indexes + (width / 2) + 0.02, y_2, color=col_y_2, width=width
-        )
-        plt.title(plt_suptitle, fontsize=15)
-        plt.suptitle(plt_title, fontsize=20, y=0.96)
-        plt.yticks(np.arange(0, y_max, step=50))
-        plt.xticks(ticks=x_indexes, labels=x)
+        plt.yticks(y_ticks)
+        plt.legend()
+        plt.legend(loc="lower center", bbox_to_anchor=(0.5, -0.02), ncol=2)
         plt.tight_layout()
         plt.savefig(self.PLT_FILENAME, dpi=300)
         plt.figure()

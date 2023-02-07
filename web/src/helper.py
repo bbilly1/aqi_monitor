@@ -44,6 +44,54 @@ def plt_fill(plt, x, y):
     )  # soft
 
 
+def chart_fill(plt, y_ticks):
+    """fill line chart background"""
+    key_map = {
+        0: {
+            "low": 0,
+            "high": 50,
+            "color": "#85a762",
+            "name": "good",
+        },
+        50: {
+            "low": 50,
+            "high": 100,
+            "color": "#d4b93c",
+            "name": "moderate",
+        },
+        100: {
+            "low": 100,
+            "high": 150,
+            "color": "#e96843",
+            "name": "ufsg",
+        },
+        150: {
+            "low": 150,
+            "high": 200,
+            "color": "#d03f3b",
+            "name": "unhealthy",
+        },
+        200: {
+            "low": 200,
+            "high": 300,
+            "color": "#be4173",
+            "name": "vunhealthy",
+        },
+        300: {
+            "low": 300,
+            "high": y_ticks[-1],
+            "color": "#714261",
+            "name": "hazardous",
+        }
+    }
+
+    for tick in y_ticks[0:-1]:
+        match = key_map[tick]
+        plt.axhspan(
+            match["low"], match["high"], facecolor=match["color"], zorder=0
+        )
+
+
 class Table:
     """ create html table from filename to pass to template """
 
