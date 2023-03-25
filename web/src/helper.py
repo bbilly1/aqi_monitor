@@ -77,6 +77,12 @@ def chart_fill(plt, y_ticks):
             "color": "#be4173",
             "name": "vunhealthy",
         },
+        250: {
+            "low": 200,
+            "high": 300,
+            "color": "#be4173",
+            "name": "vunhealthy",
+        },
         300: {
             "low": 300,
             "high": y_ticks[-1],
