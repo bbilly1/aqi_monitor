@@ -92,7 +92,11 @@ def chart_fill(plt, y_ticks):
     }
 
     for tick in y_ticks[0:-1]:
-        match = key_map[tick]
+        if tick > 300:
+            match = key_map[300]
+        else:
+            match = key_map[tick]
+
         plt.axhspan(
             match["low"], match["high"], facecolor=match["color"], zorder=0
         )
