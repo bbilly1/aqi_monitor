@@ -1,7 +1,7 @@
 """ main entry page to handle all the routes """
 
 import os
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from flask import Flask, render_template, request, app
 from flask import url_for  # pylint: disable=unused-import
@@ -51,11 +51,9 @@ if not is_maintenance_mode:
     print('initial export')
     current_graph()
     nightly_graph()
-    monthly_graph()
 
     # start scheduler
-    timezone = os.environ.get("TZ")
-    scheduler = BackgroundScheduler(timezone=timezone)
+    scheduler = BackgroundScheduler(timezone=os.environ.get("TZ", "UTC"))
     scheduler.add_job(
         current_graph, trigger="cron", minute='*/5', name='current_graph'
     )
@@ -64,6 +62,9 @@ if not is_maintenance_mode:
     )
     scheduler.add_job(
         monthly_graph, trigger="cron", day='*', hour='1', minute='2', name='month'
+    )
+    scheduler.add_job(
+        monthly_graph, next_run_time=datetime.now() + timedelta(seconds=10)
     )
     scheduler.start()
 
