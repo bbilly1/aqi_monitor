@@ -53,11 +53,11 @@ services:
       - flask
   # backend postgres
   postgres:
-    image: postgres:14
+    image: postgres:15
     container_name: postgres
     restart: always
     volumes:
-      - ./volume/postgres14:/var/lib/postgresql/data/
+      - ./volume/postgres15:/var/lib/postgresql/data/
     env_file:
       - ./env/postgres.env
     expose:
@@ -77,10 +77,10 @@ services:
       - umami-db
     restart: always
   umami-db:
-    image: postgres:14
+    image: postgres:15
     container_name: umami-db
     env_file:
       - ./env/umami.env
     volumes:
-      - ./volume/umami/db:/var/lib/postgresql/data
+      - ./volume/umami/postgres15:/var/lib/postgresql/data
     restart: always

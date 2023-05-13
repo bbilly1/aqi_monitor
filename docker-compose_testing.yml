@@ -25,11 +25,11 @@ services:
       - flask
   # backend postgres
   postgres:
-    image: postgres:14
+    image: postgres:15
     container_name: postgres
     restart: always
     volumes:
-      - ./volume/postgres14:/var/lib/postgresql/data/
+      - ./volume/postgres15:/var/lib/postgresql/data/
     env_file:
       - ./env/postgres.env
     expose:
