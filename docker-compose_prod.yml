@@ -82,6 +82,5 @@ services:
     env_file:
       - ./env/umami.env
     volumes:
-      - ./volume/umami/schema.postgresql.sql:/docker-entrypoint-initdb.d/schema.postgresql.sql:ro
       - ./volume/umami/db:/var/lib/postgresql/data
     restart: always
