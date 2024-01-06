@@ -2,7 +2,7 @@
 
 import json
 
-from flask_table import create_table, Col
+# from flask_table import create_table, Col
 
 
 def get_config():
@@ -102,37 +102,9 @@ def chart_fill(plt, y_ticks):
         )
 
 
-class Table:
-    """ create html table from filename to pass to template """
+def get_table(path):
+    """read json file from path"""
+    with open(path, "r") as f:
+        table_data = json.loads(f.read()).get("data")
 
-    COLUMNS = [' ', 'this year', 'last year', 'change']
-
-    def __init__(self, filename):
-        self.filename = filename
-        self.rows = self.get_rows()
-
-    def get_rows(self):
-        """ read filename to build rows dict """
-
-        with open(self.filename, 'r') as json_file:
-            json_raw = json_file.read()
-
-        table_json = json.loads(json_raw)
-
-        rows = []
-        for i in table_json['data']:
-            row = dict(zip(self.COLUMNS, i))
-            rows.append(row)
-
-        return rows
-
-    def create_table(self):
-        """ create the table with rows and columns """
-
-        blank_table = create_table(options={'classes': ['comp-table']})
-
-        for i in self.COLUMNS:
-            blank_table.add_column(i, Col(i))
-
-        table_obj = blank_table(self.rows)
-        return table_obj
+    return table_data

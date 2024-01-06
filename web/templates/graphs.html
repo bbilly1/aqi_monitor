@@ -91,7 +91,26 @@
         </div>
         <div class="content graph">
             <div class="graph-item">
-                {{ table }}
+                <table class="comp-table">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>this year</th>
+                            <th>last year</th>
+                            <th>change</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in table %}
+                            <tr>
+                                <td>{{ row.0 }}</td>
+                                <td>{{ row.1 }}</td>
+                                <td>{{ row.2 }}</td>
+                                <td>{{ row.3 }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
             <div class="graph-item">
                 <a href="/static/dyn/year-graph.png" data-lightbox="year">

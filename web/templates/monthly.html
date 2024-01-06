@@ -16,7 +16,26 @@
                     </a>
                 </div>
                 <div class="graph-item">
-                    {{month.table}}
+                    <table class="comp-table">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>this year</th>
+                                <th>last year</th>
+                                <th>change</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in month.table %}
+                                <tr>
+                                    <td>{{ row.0 }}</td>
+                                    <td>{{ row.1 }}</td>
+                                    <td>{{ row.2 }}</td>
+                                    <td>{{ row.3 }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         {% endfor %}

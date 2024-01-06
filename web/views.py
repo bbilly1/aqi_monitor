@@ -9,7 +9,7 @@ from flask_httpauth import HTTPBasicAuth
 from apscheduler.schedulers.background import BackgroundScheduler
 
 
-from src.helper import Table, get_config
+from src.helper import get_config, get_table
 from src.db import get_current, insert_data
 from src.graph_current import main as current_graph
 from src.graph_nightly import main as nightly_graph
@@ -92,7 +92,7 @@ def about():
 @app.route("/graphs")
 def graphs():
     """ graphs page """
-    table = Table('static/dyn/year-table.json').create_table()
+    table = get_table("static/dyn/year-table.json")
     return render_template('graphs.html', title='Graphs', table=table)
 
 
@@ -108,7 +108,7 @@ def monthly():
         month_graph = os.path.join('static/dyn/monthly', month_clean + '.png')
         month_name = datetime.strptime(month_clean, "%Y-%m").strftime('%B %Y')
         month_json = os.path.join('static/dyn/monthly', month)
-        table = Table(month_json).create_table()
+        table = get_table(month_json)
         month_dict = {
             'month_graph': month_graph,
             'month_name': month_name,
