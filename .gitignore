@@ -1,6 +1,7 @@
 # python stuff
 __pycache__
 .vscode
+.venv
 
 # protect real config files
 config.json
@@ -9,9 +10,6 @@ config.h
 # env files
 postgres.env
 umami.env
-
-# frontend font files
-*.ttf
 
 # dynamic files
 **/dyn/
