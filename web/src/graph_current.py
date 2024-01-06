@@ -89,7 +89,7 @@ class CurrentPlot:
         # calc ticks
         y_max = np.ceil(y.max()/50)*50 + 50
         # setup plot
-        plt.style.use('seaborn')
+        plt.style.use('seaborn-v0_8')
         plt.plot(x, y, color='#313131',)
         # fill colors
         plt_fill(plt, x, y)

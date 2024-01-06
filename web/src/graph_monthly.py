@@ -183,7 +183,7 @@ class MonthGenerator():
         x_dates = [f'{str(i).zfill(2)} {month_short}' for i in x_numbers]
         x_ticks = x_range, x_dates
         # plot
-        plt.style.use('seaborn')
+        plt.style.use('seaborn-v0_8')
         plt.plot(x, y_1, color='#313131', label='this year')
         plt.plot(
             x, y_2, color='#666666', linestyle='dashed', label='last year'

@@ -192,7 +192,7 @@ class LastSevenDays:
         x_ticks = self.axis['x_ticks']
         y_max = np.ceil(max(pd.concat([y_1, y_2]))/50)*50 + 50
         # plot
-        plt.style.use('seaborn')
+        plt.style.use('seaborn-v0_8')
         plt.plot(x, y_1, color='#313131', label='2hour avg')
         plt.plot(x, y_2, color='#cc0000', label='daily avg')
         # fill colors
@@ -284,7 +284,7 @@ class LastThreeDays:
         x = axis['x']
         y = axis['y'].replace(0, 1)
         x_ticks = np.arange(0, 97, step=8)
-        plt.style.use('seaborn')
+        plt.style.use('seaborn-v0_8')
         plt.plot(x, y, color='#313131',)
         # fill colors
         plt_fill(plt, x, y)
@@ -363,7 +363,7 @@ class PmGraphs:
             else:
                 col.append('#ff4d4d')
         # plot
-        plt.style.use('seaborn')
+        plt.style.use('seaborn-v0_8')
         plt.bar(x_dates, y, color=col, width=0.5)
         plt.axhline(y=thresh, color='#6ecd65', linestyle=':')
         plt.xticks(ticks=x_range, labels=x_dates)
@@ -426,7 +426,7 @@ class HourBar:
         # color columns
         col = NightlyPlots.color_colums(y)
         # create plot
-        plt.style.use('seaborn')
+        plt.style.use('seaborn-v0_8')
         plt.bar(x, y, color=col, width=0.5)
         plt.yticks(np.arange(0, y_max, step=50))
         plt.xticks(ticks=x_range, labels=x_hours)
@@ -549,7 +549,7 @@ class YearComparison:
         # build plot
         plt.title("Daily avg AQI values compared to last year", fontsize=15)
         chart_fill(plt, y_ticks)
-        plt.style.use("seaborn")
+        plt.style.use("seaborn-v0_8")
         plt.plot(x, y_1, color="#313131", label="this year")
         plt.plot(
             x, y_2, color="#666666", linestyle="dashed", label="last year"
