@@ -1,4 +1,4 @@
-FROM python:3.11.3-slim-bullseye
+FROM python:3.11.8-slim-bookworm
 
 RUN apt-get clean && apt-get -y update && \
     apt-get -y install --no-install-recommends build-essential
