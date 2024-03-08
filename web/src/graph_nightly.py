@@ -157,13 +157,13 @@ class LastSevenDays:
         mean['avg'] = mean['aqi'].resample('1d').mean()
         mean['avg'] = mean.avg.shift(6)
         # set first and last
-        mean['avg'][0] = (mean['avg'].iloc[6] + mean['aqi'][0]) / 2
-        mean['avg'][-1] = (mean['avg'].iloc[-6] + mean['aqi'][-1]) / 2
+        mean.loc[mean.index[0], "avg"] = (mean['avg'].iloc[6] + mean['aqi'].iloc[0]) / 2
+        mean.loc[mean.index[-1], "avg"] = (mean['avg'].iloc[-6] + mean['aqi'].iloc[-1]) / 2
         # smooth
         try:
-            mean['avg'].interpolate(method='polynomial', order=3, inplace=True)
+            mean["avg"] = mean["avg"].interpolate(method="polynomial", order=3)
         except ValueError:
-            mean['avg'].interpolate(method='polynomial', order=1, inplace=True)
+            mean["avg"] = mean["avg"].interpolate(method="polynomial", order=1)
 
         mean.reset_index(level=0, inplace=True)
         mean['timestamp'] = mean['timestamp'].dt.strftime('%Y-%m-%d %H:%M')
@@ -524,10 +524,10 @@ class YearComparison:
             avg_change = 'nan'
         avg_row = ('avg 10 days', avg, y_avg, avg_change)
         # zip it
-        y_2 = self.axis['y_2'].astype(object).fillna("nan")
-        y_2_change = self.axis['change'].astype(object).fillna("nan")
+        y_2 = self.axis['y_2'].astype(int).fillna("nan")
+        y_2_change = self.axis['change'].astype(str).fillna("nan")
         zipped = zip(
-            self.axis['x'], self.axis['y_1'].astype(object),
+            self.axis['x'], self.axis['y_1'].astype(int),
             y_2, y_2_change
         )
         data_rows = list(zipped)
