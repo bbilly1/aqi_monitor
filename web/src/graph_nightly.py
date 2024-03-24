@@ -500,8 +500,8 @@ class YearComparison:
         # return axis
         self.axis = {
             'x': mean['timestamp'],
-            'y_1': mean['now_aqi'].astype('Int64'),
-            'y_2': mean['year_aqi'].astype('Int64'),
+            'y_1': mean['now_aqi'],
+            'y_2': mean['year_aqi'],
             'change': mean['change']
         }
 
@@ -527,7 +527,7 @@ class YearComparison:
         y_2 = self.axis['y_2'].astype(int).fillna("nan")
         y_2_change = self.axis['change'].astype(str).fillna("nan")
         zipped = zip(
-            self.axis['x'], self.axis['y_1'].astype(int),
+            self.axis['x'], self.axis['y_1'],
             y_2, y_2_change
         )
         data_rows = list(zipped)
