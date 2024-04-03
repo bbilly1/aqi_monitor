@@ -524,10 +524,11 @@ class YearComparison:
             avg_change = 'nan'
         avg_row = ('avg 10 days', avg, y_avg, avg_change)
         # zip it
+        y_1 = self.axis['y_1'].astype(int).fillna("nan")
         y_2 = self.axis['y_2'].astype(int).fillna("nan")
         y_2_change = self.axis['change'].astype(str).fillna("nan")
         zipped = zip(
-            self.axis['x'], self.axis['y_1'],
+            self.axis['x'], y_1,
             y_2, y_2_change
         )
         data_rows = list(zipped)
