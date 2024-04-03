@@ -1,11 +1,11 @@
 APScheduler==3.10.4
 Flask==3.0.2
 Flask_HTTPAuth==4.8.0
-ipython==8.22.2
+ipython==8.23.0
 matplotlib==3.8.3
 numpy==1.26.4
 pandas==2.2.1
 psycopg2-binary==2.9.9
 requests==2.31.0
-scipy==1.12.0
+scipy==1.13.0
 uWSGI==2.0.24
