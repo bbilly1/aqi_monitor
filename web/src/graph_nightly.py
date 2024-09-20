@@ -519,7 +519,7 @@ class YearComparison:
                 avg_change = 'up'
             else:
                 avg_change = 'same'
-        except TypeError:
+        except (TypeError, ValueError):
             y_avg = 'nan'
             avg_change = 'nan'
         avg_row = ('avg 10 days', avg, y_avg, avg_change)
