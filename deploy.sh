@@ -6,7 +6,7 @@ local_host="lpb-air.local"
 
 # rebuild production
 function sync_docker {
-    rsync --progress --ignore-existing -a docker-compose_prod.yml "$remote_host":docker/docker-compose.yml
+    rsync --progress -a docker-compose_prod.yml "$remote_host":docker/docker-compose.yml
     rsync --progress -a env "$remote_host":docker/
     rsync --progress -a --delete-after helper_scripts "$remote_host":docker/
     rsync --progress -a --delete-after nginx "$remote_host":docker/
@@ -25,10 +25,9 @@ function sync_test {
     
     ssh "$local_host" "mkdir -p docker"
 
-    rsync --progress --ignore-existing -a docker-compose_testing.yml "$local_host":docker/docker-compose.yml
+    rsync --progress -a docker-compose_testing.yml "$local_host":docker/docker-compose.yml
     rsync --progress -a env "$local_host":docker/
     rsync --progress -a --delete-after helper_scripts "$local_host":docker/
-    rsync --progress -a --delete-after nginx "$local_host":docker/
     rsync --progress -a --delete-after \
         --exclude config.json.sample \
         --exclude __pycache__ \

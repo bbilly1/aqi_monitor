@@ -14,7 +14,8 @@ services:
       - "8080"
   # nginx infront of uwsgi
   nginx:
-    build: ./nginx
+    build:
+      context: https://github.com/bbilly1/aqi_monitor.git#master:nginx
     container_name: backend_nginx
     restart: always
     ports: 
@@ -27,7 +28,7 @@ services:
     container_name: postgres
     restart: always
     volumes:
-      - ./volume/postgres15:/var/lib/postgresql/data/
+      - ./volume/postgres:/var/lib/postgresql/data/
     env_file:
       - ./env/postgres.env
     expose:

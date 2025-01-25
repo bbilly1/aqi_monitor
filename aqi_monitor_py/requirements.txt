@@ -1,7 +1,7 @@
-ipython
-simple-sds011
-requests
-RPi.bme280
 
 cffi
+ipython
+requests
+RPi.bme280
+simple-sds011
 smbus-cffi

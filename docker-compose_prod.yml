@@ -39,7 +39,8 @@ services:
       - "8080"
   # nginx infront of uwsgi
   nginx:
-    build: ./nginx
+    build:
+      context: https://github.com/bbilly1/aqi_monitor.git#master:nginx
     container_name: backend_nginx
     restart: always
     environment:
@@ -69,8 +70,8 @@ services:
     env_file:
       - ./env/umami.env
     environment:
-      - VIRTUAL_HOST=www.stats.lpb-air.com
-      - LETSENCRYPT_HOST=www.stats.lpb-air.com
+      - VIRTUAL_HOST=stats.lpb-air.com
+      - LETSENCRYPT_HOST=stats.lpb-air.com
     depends_on:
       - umami-db
     restart: always
