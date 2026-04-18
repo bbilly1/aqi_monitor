@@ -1,6 +1,7 @@
 """ handle all monthly tasks """
 
 import json
+import shutil
 from os import listdir, path
 
 from datetime import datetime, timedelta
@@ -12,6 +13,8 @@ from matplotlib import pyplot as plt
 
 from src.db import DatabaseConnect
 from src.helper import plt_fill
+
+FALLBACK_GRAPH = "static/img/fallback.png"
 
 
 class MonthStatus:
@@ -120,41 +123,68 @@ class MonthGenerator():
         db_handler.db_close()
         return m_rows, y_rows
 
+    def get_month_date(self):
+        """ get requested month from timestamp range """
+        return datetime.fromtimestamp(self.m_stamp[0]).date()
+
+    @staticmethod
+    def get_resampled_rows(rows, column_name):
+        """ build a resampled dataframe with a DatetimeIndex """
+        df = pd.DataFrame(
+            {
+                'timestamp': pd.to_datetime(
+                    [datetime.fromtimestamp(i[0]) for i in rows]
+                ),
+                column_name: [int(i[1]) for i in rows]
+            }
+        )
+        indexed = df.set_index('timestamp')
+        indexed.index = pd.DatetimeIndex(indexed.index, name='timestamp')
+        indexed.sort_index(inplace=True)
+
+        if indexed.empty:
+            return pd.DataFrame(
+                {column_name: pd.Series(dtype='float64')},
+                index=pd.DatetimeIndex([], name='timestamp')
+            )
+
+        return indexed.resample('8h').mean().round()
+
+    @staticmethod
+    def get_summary(values):
+        """ summarize a plotted series """
+        cleaned = pd.Series(values, dtype='float64').dropna()
+        if cleaned.empty:
+            return {
+                'min': 'nan',
+                'max': 'nan',
+                'avg': 'nan',
+                'category': 'nan'
+            }
+
+        avg = int(cleaned.mean())
+        return {
+            'min': int(cleaned.min()),
+            'max': int(cleaned.max()),
+            'avg': avg,
+            'category': MonthGenerator.get_aqi(avg)
+        }
+
     def build_axis(self):
         """ build axis from rows """
-        # initial df
-        x_timeline = [datetime.fromtimestamp(i[0]) for i in self.m_rows]
-        y_aqi_values = [int(i[1]) for i in self.m_rows]
-        data = {'timestamp': x_timeline, 'now_aqi': y_aqi_values}
-        df = pd.DataFrame(data)
-        indexed = df.set_index('timestamp')
-        indexed.sort_values(by=['timestamp'], inplace=True)
-        mean = indexed.resample('8h').mean().round()
-        # reset timestamp to day
-        mean.reset_index(level=0, inplace=True)
+        mean = self.get_resampled_rows(self.m_rows, 'now_aqi')
+        y_mean = self.get_resampled_rows(self.y_rows, 'year_aqi')
+
+        mean = mean.reset_index()
         mean['timestamp'] = mean['timestamp'].dt.strftime('%d %H:%M')
         mean.set_index('timestamp', inplace=True)
-        # second df with last year data
-        x_timeline = [datetime.fromtimestamp(i[0]) for i in self.y_rows]
-        y_aqi_values = [int(i[1]) for i in self.y_rows]
-        data = {'timestamp': x_timeline, 'year_aqi': y_aqi_values}
-        df = pd.DataFrame(data)
-        indexed = df.set_index('timestamp')
-        indexed.sort_values(by=['timestamp'], inplace=True)
-        # skip if empty
-        if len(indexed) == 0:
-            y_mean = indexed
-        else:
-            y_mean = indexed.resample('8h').mean().round()
-        # reset timestamp to day
-        y_mean.reset_index(level=0, inplace=True)
-        if len(indexed):
-            y_mean['timestamp'] = y_mean['timestamp'].dt.strftime('%d %H:%M')
+
+        y_mean = y_mean.reset_index()
+        y_mean['timestamp'] = y_mean['timestamp'].dt.strftime('%d %H:%M')
         y_mean.set_index('timestamp', inplace=True)
-        # merge the two
-        mean['year_aqi'] = y_mean['year_aqi']
+
+        mean = pd.concat([mean, y_mean], axis=1).sort_index()
         mean.reset_index(level=0, inplace=True)
-        mean.sort_values(by='timestamp', ascending=True, inplace=True)
         # return axis
         axis = {
             'x': mean['timestamp'],
@@ -165,18 +195,23 @@ class MonthGenerator():
 
     def write_plt(self):
         """ write monthly plot """
-        x = self.axis['x']
-        y_1 = self.axis['y_1'].replace(0, 1)
-        y_2 = self.axis['y_2'].replace(0, 1)
-        # parse timestamp
-        date_month = datetime.fromtimestamp(self.m_rows[-1][0]).date()
+        date_month = self.get_month_date()
         date_title = date_month.strftime('%b %Y')
         date_file = date_month.strftime('%Y-%m')
         month_short = date_month.strftime('%b')
         file_name = 'static/dyn/monthly/' + date_file + '.png'
+
+        if self.axis['x'].empty:
+            print(f'no rows found for {date_title}, exporting fallback graph')
+            shutil.copy(FALLBACK_GRAPH, file_name)
+            return
+
+        x = self.axis['x']
+        y_1 = self.axis['y_1'].replace(0, 1)
+        y_2 = self.axis['y_2'].replace(0, 1)
         print(f'exporting graph for {date_title}')
         # build ticks
-        y_max = np.ceil(max(pd.concat([y_1, y_2])) / 50) * 50 + 50
+        y_max = np.ceil(pd.concat([y_1, y_2]).max(skipna=True) / 50) * 50 + 50
         x_range = np.arange(0, len(x), step=9)
         last_day = int(x.max().split()[0])
         x_numbers = np.arange(1, last_day + 1, step=3)
@@ -210,9 +245,10 @@ class MonthGenerator():
             ('Hazardous', 300, 500),
         ]
 
+        category = 'nan'
         for break_point in breakpoints:
             category, min_val, max_val = break_point
-            if min_val < val <= max_val:
+            if min_val <= val <= max_val:
                 # found it
                 break
 
@@ -222,8 +258,8 @@ class MonthGenerator():
     def get_change(m_val, y_val):
         """ helper function to get change on thresh """
         # skip if nan
-        if y_val == 'nan':
-            return y_val
+        if m_val == 'nan' or y_val == 'nan' or m_val == 0:
+            return 'nan'
 
         diff_avg = (m_val - y_val) / m_val
         if diff_avg <= -0.15:
@@ -236,32 +272,38 @@ class MonthGenerator():
 
     def write_table(self):
         """ write json file with monthly details """
-        date_month = datetime.fromtimestamp(self.m_rows[-1][0]).date()
+        date_month = self.get_month_date()
         date_file = date_month.strftime('%Y-%m')
         file_name = 'static/dyn/monthly/' + date_file + '.json'
-        # current
-        m_min = int(self.axis['y_1'].min())
-        m_max = int(self.axis['y_1'].max())
-        m_avg = int(self.axis['y_1'].mean())
-        m_cat = self.get_aqi(m_avg)
-        # last
-        try:
-            y_min = int(self.axis['y_2'].min())
-            y_max = int(self.axis['y_2'].max())
-            y_avg = int(self.axis['y_2'].mean())
-            y_cat = self.get_aqi(y_avg)
-        except ValueError:
-            y_min = 'nan'
-            y_max = 'nan'
-            y_avg = 'nan'
-            y_cat = 'nan'
+        current = self.get_summary(self.axis['y_1'])
+        last_year = self.get_summary(self.axis['y_2'])
         # build dict
         monthly_dict = {
             'data': [
-                ['min: ', m_min, y_min, self.get_change(m_min, y_min)],
-                ['max: ', m_max, y_max, self.get_change(m_max, y_max)],
-                ['avg: ', m_avg, y_avg, self.get_change(m_avg, y_avg)],
-                ['avg aqi: ', m_cat, y_cat, self.get_change(m_avg, y_avg)]
+                [
+                    'min: ',
+                    current['min'],
+                    last_year['min'],
+                    self.get_change(current['min'], last_year['min'])
+                ],
+                [
+                    'max: ',
+                    current['max'],
+                    last_year['max'],
+                    self.get_change(current['max'], last_year['max'])
+                ],
+                [
+                    'avg: ',
+                    current['avg'],
+                    last_year['avg'],
+                    self.get_change(current['avg'], last_year['avg'])
+                ],
+                [
+                    'avg aqi: ',
+                    current['category'],
+                    last_year['category'],
+                    self.get_change(current['avg'], last_year['avg'])
+                ]
             ]
         }
         # write to disk
